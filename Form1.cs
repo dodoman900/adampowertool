@@ -6,307 +6,307 @@ namespace AdamPowerTool
 {
     public partial class Form1 : Form
     {
-        private System.ComponentModel.IContainer? components = null;
-        private System.Windows.Forms.TabControl? tabControl1;
-        private System.Windows.Forms.TabPage? tabPage1;
-        private System.Windows.Forms.TabPage? tabPage2;
-        private System.Windows.Forms.TabPage? tabPage3;
-        private System.Windows.Forms.TabPage? tabPage4;
-        private System.Windows.Forms.Button? button1;
-        private System.Windows.Forms.Button? button2;
-        private System.Windows.Forms.Button? button3;
-        private System.Windows.Forms.Button? button4;
-        private System.Windows.Forms.ComboBox? timeRangeComboBox;
-        private System.Windows.Forms.Label? systemInfoLabel;
-        private MonitorGraph? monitorGraph;
-        private System.Windows.Forms.DataGridView? usageTable;
-        private System.Windows.Forms.Label? cpuTempLabel;
-        private System.Windows.Forms.Label? gpuTempLabel;
-        private System.Windows.Forms.Label? cpuLabel;
-        private System.Windows.Forms.Label? gpuLabel;
+        private System.ComponentModel.IContainer? bilesenler = null;
+        private System.Windows.Forms.TabControl? sekmeKontrolu;
+        private System.Windows.Forms.TabPage? sekmeSayfasi1;
+        private System.Windows.Forms.TabPage? sekmeSayfasi2;
+        private System.Windows.Forms.TabPage? sekmeSayfasi3;
+        private System.Windows.Forms.TabPage? sekmeSayfasi4;
+        private System.Windows.Forms.Button? dugme1;
+        private System.Windows.Forms.Button? dugme2;
+        private System.Windows.Forms.Button? dugme3;
+        private System.Windows.Forms.Button? dugme4;
+        private System.Windows.Forms.ComboBox? zamanAraligiKutusu;
+        private System.Windows.Forms.Label? sistemBilgiEtiketi;
+        private MonitorGraph? izlemeGrafik;
+        private System.Windows.Forms.DataGridView? kullanimTablosu;
+        private System.Windows.Forms.Label? islemciSicaklikEtiketi;
+        private System.Windows.Forms.Label? ekranKartiSicaklikEtiketi;
+        private System.Windows.Forms.Label? islemciEtiketi;
+        private System.Windows.Forms.Label? ekranKartiEtiketi;
 
         public Form1()
         {
-            InitializeComponent();
-            SetupTimeRangeComboBox();
-            SetupUsageTable();
-            SetupTemperatureUpdates();
-            monitorGraph?.StartUpdating();
+            BilesenleriBaslat();
+            ZamanAraligiKutusunuKur();
+            KullanimTablosunuKur();
+            SicaklikGuncellemeleriniKur();
+            izlemeGrafik?.GuncellemeyiBaslat();
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing && (bilesenler != null))
             {
-                components.Dispose();
+                bilesenler.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        private void InitializeComponent()
+        private void BilesenleriBaslat()
         {
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.systemInfoLabel = new System.Windows.Forms.Label();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.monitorGraph = new AdamPowerTool.MonitorGraph();
-            this.usageTable = new System.Windows.Forms.DataGridView();
-            this.cpuTempLabel = new System.Windows.Forms.Label();
-            this.gpuTempLabel = new System.Windows.Forms.Label();
-            this.cpuLabel = new System.Windows.Forms.Label();
-            this.gpuLabel = new System.Windows.Forms.Label();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.timeRangeComboBox = new System.Windows.Forms.ComboBox();
+            this.sekmeKontrolu = new System.Windows.Forms.TabControl();
+            this.sekmeSayfasi1 = new System.Windows.Forms.TabPage();
+            this.sistemBilgiEtiketi = new System.Windows.Forms.Label();
+            this.sekmeSayfasi2 = new System.Windows.Forms.TabPage();
+            this.izlemeGrafik = new AdamPowerTool.MonitorGraph();
+            this.kullanimTablosu = new System.Windows.Forms.DataGridView();
+            this.islemciSicaklikEtiketi = new System.Windows.Forms.Label();
+            this.ekranKartiSicaklikEtiketi = new System.Windows.Forms.Label();
+            this.islemciEtiketi = new System.Windows.Forms.Label();
+            this.ekranKartiEtiketi = new System.Windows.Forms.Label();
+            this.sekmeSayfasi3 = new System.Windows.Forms.TabPage();
+            this.sekmeSayfasi4 = new System.Windows.Forms.TabPage();
+            this.dugme1 = new System.Windows.Forms.Button();
+            this.dugme2 = new System.Windows.Forms.Button();
+            this.dugme3 = new System.Windows.Forms.Button();
+            this.dugme4 = new System.Windows.Forms.Button();
+            this.zamanAraligiKutusu = new System.Windows.Forms.ComboBox();
 
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.usageTable)).BeginInit();
+            this.sekmeKontrolu.SuspendLayout();
+            this.sekmeSayfasi1.SuspendLayout();
+            this.sekmeSayfasi2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.kullanimTablosu)).BeginInit();
             this.SuspendLayout();
 
-            // tabControl1
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Controls.Add(this.tabPage4);
-            this.tabControl1.Location = new System.Drawing.Point(10, 50);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(760, 600);
-            this.tabControl1.TabIndex = 0;
-            this.tabControl1.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
-            this.tabControl1.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.tabControl1.Appearance = TabAppearance.FlatButtons;
-            this.tabControl1.ItemSize = new System.Drawing.Size(0, 1);
-            this.tabControl1.SizeMode = TabSizeMode.Fixed;
+            // sekmeKontrolu
+            this.sekmeKontrolu.Controls.Add(this.sekmeSayfasi1);
+            this.sekmeKontrolu.Controls.Add(this.sekmeSayfasi2);
+            this.sekmeKontrolu.Controls.Add(this.sekmeSayfasi3);
+            this.sekmeKontrolu.Controls.Add(this.sekmeSayfasi4);
+            this.sekmeKontrolu.Location = new System.Drawing.Point(10, 50);
+            this.sekmeKontrolu.Name = "sekmeKontrolu";
+            this.sekmeKontrolu.SelectedIndex = 0;
+            this.sekmeKontrolu.Size = new System.Drawing.Size(760, 600);
+            this.sekmeKontrolu.TabIndex = 0;
+            this.sekmeKontrolu.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
+            this.sekmeKontrolu.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            this.sekmeKontrolu.Appearance = TabAppearance.FlatButtons;
+            this.sekmeKontrolu.ItemSize = new System.Drawing.Size(0, 1);
+            this.sekmeKontrolu.SizeMode = TabSizeMode.Fixed;
 
-            // tabPage1
-            this.tabPage1.Controls.Add(this.systemInfoLabel);
-            this.tabPage1.Location = new System.Drawing.Point(4, 4);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(752, 592);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Sistem Bilgileri";
-            this.tabPage1.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
-            this.tabPage1.Enter += new System.EventHandler(this.tabPage1_Enter);
+            // sekmeSayfasi1
+            this.sekmeSayfasi1.Controls.Add(this.sistemBilgiEtiketi);
+            this.sekmeSayfasi1.Location = new System.Drawing.Point(4, 4);
+            this.sekmeSayfasi1.Name = "sekmeSayfasi1";
+            this.sekmeSayfasi1.Padding = new System.Windows.Forms.Padding(3);
+            this.sekmeSayfasi1.Size = new System.Drawing.Size(752, 592);
+            this.sekmeSayfasi1.TabIndex = 0;
+            this.sekmeSayfasi1.Text = "Sistem Bilgileri";
+            this.sekmeSayfasi1.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
+            this.sekmeSayfasi1.Enter += new System.EventHandler(this.SekmeSayfasi1_Giris);
 
-            // systemInfoLabel
-            this.systemInfoLabel.Location = new System.Drawing.Point(6, 6);
-            this.systemInfoLabel.Name = "systemInfoLabel";
-            this.systemInfoLabel.Size = new System.Drawing.Size(740, 580);
-            this.systemInfoLabel.TabIndex = 0;
-            this.systemInfoLabel.ForeColor = System.Drawing.Color.White;
-            this.systemInfoLabel.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
-            this.systemInfoLabel.AutoSize = false;
-            this.systemInfoLabel.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
+            // sistemBilgiEtiketi
+            this.sistemBilgiEtiketi.Location = new System.Drawing.Point(6, 6);
+            this.sistemBilgiEtiketi.Name = "sistemBilgiEtiketi";
+            this.sistemBilgiEtiketi.Size = new System.Drawing.Size(740, 580);
+            this.sistemBilgiEtiketi.TabIndex = 0;
+            this.sistemBilgiEtiketi.ForeColor = System.Drawing.Color.White;
+            this.sistemBilgiEtiketi.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            this.sistemBilgiEtiketi.AutoSize = false;
+            this.sistemBilgiEtiketi.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
 
-            // tabPage2
-            this.tabPage2.Controls.Add(this.monitorGraph);
-            this.tabPage2.Controls.Add(this.usageTable);
-            this.tabPage2.Controls.Add(this.cpuTempLabel);
-            this.tabPage2.Controls.Add(this.gpuTempLabel);
-            this.tabPage2.Controls.Add(this.cpuLabel);
-            this.tabPage2.Controls.Add(this.gpuLabel);
-            this.tabPage2.Location = new System.Drawing.Point(4, 4);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(752, 592);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Veri Ýzleme";
-            this.tabPage2.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
+            // sekmeSayfasi2
+            this.sekmeSayfasi2.Controls.Add(this.izlemeGrafik);
+            this.sekmeSayfasi2.Controls.Add(this.kullanimTablosu);
+            this.sekmeSayfasi2.Controls.Add(this.islemciSicaklikEtiketi);
+            this.sekmeSayfasi2.Controls.Add(this.ekranKartiSicaklikEtiketi);
+            this.sekmeSayfasi2.Controls.Add(this.islemciEtiketi);
+            this.sekmeSayfasi2.Controls.Add(this.ekranKartiEtiketi);
+            this.sekmeSayfasi2.Location = new System.Drawing.Point(4, 4);
+            this.sekmeSayfasi2.Name = "sekmeSayfasi2";
+            this.sekmeSayfasi2.Padding = new System.Windows.Forms.Padding(3);
+            this.sekmeSayfasi2.Size = new System.Drawing.Size(752, 592);
+            this.sekmeSayfasi2.TabIndex = 1;
+            this.sekmeSayfasi2.Text = "Veri Ýzleme";
+            this.sekmeSayfasi2.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
 
-            // monitorGraph
-            this.monitorGraph.Location = new System.Drawing.Point(6, 90);
-            this.monitorGraph.Name = "monitorGraph";
-            this.monitorGraph.Size = new System.Drawing.Size(740, 500);
-            this.monitorGraph.TabIndex = 0;
+            // izlemeGrafik
+            this.izlemeGrafik.Location = new System.Drawing.Point(6, 90);
+            this.izlemeGrafik.Name = "izlemeGrafik";
+            this.izlemeGrafik.Size = new System.Drawing.Size(740, 500);
+            this.izlemeGrafik.TabIndex = 0;
 
-            // usageTable
-            this.usageTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.usageTable.Location = new System.Drawing.Point(6, 6);
-            this.usageTable.Name = "usageTable";
-            this.usageTable.RowHeadersVisible = false;
-            this.usageTable.Size = new System.Drawing.Size(300, 80);
-            this.usageTable.TabIndex = 1;
-            this.usageTable.BackgroundColor = System.Drawing.Color.FromArgb(27, 27, 27);
-            this.usageTable.ForeColor = System.Drawing.Color.White;
-            this.usageTable.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
-            this.usageTable.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.usageTable.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
-            this.usageTable.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
-            this.usageTable.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
-            this.usageTable.DefaultCellStyle.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            // kullanimTablosu
+            this.kullanimTablosu.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.kullanimTablosu.Location = new System.Drawing.Point(6, 6);
+            this.kullanimTablosu.Name = "kullanimTablosu";
+            this.kullanimTablosu.RowHeadersVisible = false;
+            this.kullanimTablosu.Size = new System.Drawing.Size(300, 80);
+            this.kullanimTablosu.TabIndex = 1;
+            this.kullanimTablosu.BackgroundColor = System.Drawing.Color.FromArgb(27, 27, 27);
+            this.kullanimTablosu.ForeColor = System.Drawing.Color.White;
+            this.kullanimTablosu.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
+            this.kullanimTablosu.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            this.kullanimTablosu.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            this.kullanimTablosu.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
+            this.kullanimTablosu.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            this.kullanimTablosu.DefaultCellStyle.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
 
-            // cpuTempLabel
-            this.cpuTempLabel.Location = new System.Drawing.Point(316, 6);
-            this.cpuTempLabel.Size = new System.Drawing.Size(100, 40);
-            this.cpuTempLabel.Text = "0.0°C";
-            this.cpuTempLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cpuTempLabel.BackColor = System.Drawing.Color.Green;
-            this.cpuTempLabel.ForeColor = System.Drawing.Color.White;
-            this.cpuTempLabel.Font = new System.Drawing.Font("Montserrat", 12F, System.Drawing.FontStyle.Bold);
-            this.cpuTempLabel.Name = "cpuTempLabel";
-            this.cpuTempLabel.TabIndex = 2;
+            // islemciSicaklikEtiketi
+            this.islemciSicaklikEtiketi.Location = new System.Drawing.Point(316, 6);
+            this.islemciSicaklikEtiketi.Size = new System.Drawing.Size(100, 40);
+            this.islemciSicaklikEtiketi.Text = "0.0°C";
+            this.islemciSicaklikEtiketi.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.islemciSicaklikEtiketi.BackColor = System.Drawing.Color.Green;
+            this.islemciSicaklikEtiketi.ForeColor = System.Drawing.Color.White;
+            this.islemciSicaklikEtiketi.Font = new System.Drawing.Font("Montserrat", 12F, System.Drawing.FontStyle.Bold);
+            this.islemciSicaklikEtiketi.Name = "islemciSicaklikEtiketi";
+            this.islemciSicaklikEtiketi.TabIndex = 2;
 
-            // gpuTempLabel
-            this.gpuTempLabel.Location = new System.Drawing.Point(426, 6);
-            this.gpuTempLabel.Size = new System.Drawing.Size(100, 40);
-            this.gpuTempLabel.Text = "0.0°C";
-            this.gpuTempLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.gpuTempLabel.BackColor = System.Drawing.Color.Green;
-            this.gpuTempLabel.ForeColor = System.Drawing.Color.White;
-            this.gpuTempLabel.Font = new System.Drawing.Font("Montserrat", 12F, System.Drawing.FontStyle.Bold);
-            this.gpuTempLabel.Name = "gpuTempLabel";
-            this.gpuTempLabel.TabIndex = 3;
+            // ekranKartiSicaklikEtiketi
+            this.ekranKartiSicaklikEtiketi.Location = new System.Drawing.Point(426, 6);
+            this.ekranKartiSicaklikEtiketi.Size = new System.Drawing.Size(100, 40);
+            this.ekranKartiSicaklikEtiketi.Text = "0.0°C";
+            this.ekranKartiSicaklikEtiketi.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ekranKartiSicaklikEtiketi.BackColor = System.Drawing.Color.Green;
+            this.ekranKartiSicaklikEtiketi.ForeColor = System.Drawing.Color.White;
+            this.ekranKartiSicaklikEtiketi.Font = new System.Drawing.Font("Montserrat", 12F, System.Drawing.FontStyle.Bold);
+            this.ekranKartiSicaklikEtiketi.Name = "ekranKartiSicaklikEtiketi";
+            this.ekranKartiSicaklikEtiketi.TabIndex = 3;
 
-            // cpuLabel
-            this.cpuLabel.Location = new System.Drawing.Point(316, 46);
-            this.cpuLabel.Size = new System.Drawing.Size(100, 20);
-            this.cpuLabel.Text = "CPU";
-            this.cpuLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cpuLabel.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.cpuLabel.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
-            this.cpuLabel.Name = "cpuLabel";
-            this.cpuLabel.TabIndex = 4;
+            // islemciEtiketi
+            this.islemciEtiketi.Location = new System.Drawing.Point(316, 46);
+            this.islemciEtiketi.Size = new System.Drawing.Size(100, 20);
+            this.islemciEtiketi.Text = "CPU";
+            this.islemciEtiketi.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.islemciEtiketi.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            this.islemciEtiketi.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            this.islemciEtiketi.Name = "islemciEtiketi";
+            this.islemciEtiketi.TabIndex = 4;
 
-            // gpuLabel
-            this.gpuLabel.Location = new System.Drawing.Point(426, 46);
-            this.gpuLabel.Size = new System.Drawing.Size(100, 20);
-            this.gpuLabel.Text = "GPU";
-            this.gpuLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.gpuLabel.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.gpuLabel.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
-            this.gpuLabel.Name = "gpuLabel";
-            this.gpuLabel.TabIndex = 5;
+            // ekranKartiEtiketi
+            this.ekranKartiEtiketi.Location = new System.Drawing.Point(426, 46);
+            this.ekranKartiEtiketi.Size = new System.Drawing.Size(100, 20);
+            this.ekranKartiEtiketi.Text = "GPU";
+            this.ekranKartiEtiketi.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ekranKartiEtiketi.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            this.ekranKartiEtiketi.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            this.ekranKartiEtiketi.Name = "ekranKartiEtiketi";
+            this.ekranKartiEtiketi.TabIndex = 5;
 
-            // tabPage3
-            this.tabPage3.Location = new System.Drawing.Point(4, 4);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(752, 592);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Optimizasyon";
-            this.tabPage3.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
+            // sekmeSayfasi3
+            this.sekmeSayfasi3.Location = new System.Drawing.Point(4, 4);
+            this.sekmeSayfasi3.Name = "sekmeSayfasi3";
+            this.sekmeSayfasi3.Size = new System.Drawing.Size(752, 592);
+            this.sekmeSayfasi3.TabIndex = 2;
+            this.sekmeSayfasi3.Text = "Optimizasyon";
+            this.sekmeSayfasi3.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
 
-            // tabPage4
-            this.tabPage4.Location = new System.Drawing.Point(4, 4);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(752, 592);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Oyun";
-            this.tabPage4.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
+            // sekmeSayfasi4
+            this.sekmeSayfasi4.Location = new System.Drawing.Point(4, 4);
+            this.sekmeSayfasi4.Name = "sekmeSayfasi4";
+            this.sekmeSayfasi4.Size = new System.Drawing.Size(752, 592);
+            this.sekmeSayfasi4.TabIndex = 3;
+            this.sekmeSayfasi4.Text = "Oyun";
+            this.sekmeSayfasi4.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
 
-            // button1
-            this.button1.Location = new System.Drawing.Point(10, 10);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(80, 30);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Sistem";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
-            this.button1.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.button1.FlatStyle = FlatStyle.Flat;
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(60, 60, 60);
-            this.button1.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            this.button1.MouseEnter += new System.EventHandler(this.button_MouseEnter);
-            this.button1.MouseLeave += new System.EventHandler(this.button_MouseLeave);
+            // dugme1
+            this.dugme1.Location = new System.Drawing.Point(10, 10);
+            this.dugme1.Name = "dugme1";
+            this.dugme1.Size = new System.Drawing.Size(80, 30);
+            this.dugme1.TabIndex = 1;
+            this.dugme1.Text = "Sistem";
+            this.dugme1.UseVisualStyleBackColor = false;
+            this.dugme1.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
+            this.dugme1.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            this.dugme1.FlatStyle = FlatStyle.Flat;
+            this.dugme1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            this.dugme1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(60, 60, 60);
+            this.dugme1.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
+            this.dugme1.Click += new System.EventHandler(this.Dugme1_Tikla);
+            this.dugme1.MouseEnter += new System.EventHandler(this.Dugme_UzerineGel);
+            this.dugme1.MouseLeave += new System.EventHandler(this.Dugme_Ayril);
 
-            // button2
-            this.button2.Location = new System.Drawing.Point(100, 10);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(80, 30);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Veri Ýzleme";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
-            this.button2.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.button2.FlatStyle = FlatStyle.Flat;
-            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(60, 60, 60);
-            this.button2.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            this.button2.MouseEnter += new System.EventHandler(this.button_MouseEnter);
-            this.button2.MouseLeave += new System.EventHandler(this.button_MouseLeave);
+            // dugme2
+            this.dugme2.Location = new System.Drawing.Point(100, 10);
+            this.dugme2.Name = "dugme2";
+            this.dugme2.Size = new System.Drawing.Size(80, 30);
+            this.dugme2.TabIndex = 2;
+            this.dugme2.Text = "Veri Ýzleme";
+            this.dugme2.UseVisualStyleBackColor = false;
+            this.dugme2.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
+            this.dugme2.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            this.dugme2.FlatStyle = FlatStyle.Flat;
+            this.dugme2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            this.dugme2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(60, 60, 60);
+            this.dugme2.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
+            this.dugme2.Click += new System.EventHandler(this.Dugme2_Tikla);
+            this.dugme2.MouseEnter += new System.EventHandler(this.Dugme_UzerineGel);
+            this.dugme2.MouseLeave += new System.EventHandler(this.Dugme_Ayril);
 
-            // button3
-            this.button3.Location = new System.Drawing.Point(190, 10);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(80, 30);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "Optimizasyon";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
-            this.button3.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.button3.FlatStyle = FlatStyle.Flat;
-            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(60, 60, 60);
-            this.button3.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            this.button3.MouseEnter += new System.EventHandler(this.button_MouseEnter);
-            this.button3.MouseLeave += new System.EventHandler(this.button_MouseLeave);
+            // dugme3
+            this.dugme3.Location = new System.Drawing.Point(190, 10);
+            this.dugme3.Name = "dugme3";
+            this.dugme3.Size = new System.Drawing.Size(80, 30);
+            this.dugme3.TabIndex = 3;
+            this.dugme3.Text = "Optimizasyon";
+            this.dugme3.UseVisualStyleBackColor = false;
+            this.dugme3.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
+            this.dugme3.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            this.dugme3.FlatStyle = FlatStyle.Flat;
+            this.dugme3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            this.dugme3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(60, 60, 60);
+            this.dugme3.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
+            this.dugme3.Click += new System.EventHandler(this.Dugme3_Tikla);
+            this.dugme3.MouseEnter += new System.EventHandler(this.Dugme_UzerineGel);
+            this.dugme3.MouseLeave += new System.EventHandler(this.Dugme_Ayril);
 
-            // button4
-            this.button4.Location = new System.Drawing.Point(280, 10);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(80, 30);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "Oyun";
-            this.button4.UseVisualStyleBackColor = false;
-            this.button4.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
-            this.button4.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.button4.FlatStyle = FlatStyle.Flat;
-            this.button4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(60, 60, 60);
-            this.button4.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            this.button4.MouseEnter += new System.EventHandler(this.button_MouseEnter);
-            this.button4.MouseLeave += new System.EventHandler(this.button_MouseLeave);
+            // dugme4
+            this.dugme4.Location = new System.Drawing.Point(280, 10);
+            this.dugme4.Name = "dugme4";
+            this.dugme4.Size = new System.Drawing.Size(80, 30);
+            this.dugme4.TabIndex = 4;
+            this.dugme4.Text = "Oyun";
+            this.dugme4.UseVisualStyleBackColor = false;
+            this.dugme4.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
+            this.dugme4.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            this.dugme4.FlatStyle = FlatStyle.Flat;
+            this.dugme4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            this.dugme4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(60, 60, 60);
+            this.dugme4.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
+            this.dugme4.Click += new System.EventHandler(this.Dugme4_Tikla);
+            this.dugme4.MouseEnter += new System.EventHandler(this.Dugme_UzerineGel);
+            this.dugme4.MouseLeave += new System.EventHandler(this.Dugme_Ayril);
 
-            // timeRangeComboBox
-            this.timeRangeComboBox.Location = new System.Drawing.Point(370, 10);
-            this.timeRangeComboBox.Size = new System.Drawing.Size(120, 30);
-            this.timeRangeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.timeRangeComboBox.BackColor = System.Drawing.Color.FromArgb(60, 60, 60);
-            this.timeRangeComboBox.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.timeRangeComboBox.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
-            this.timeRangeComboBox.Name = "timeRangeComboBox";
-            this.timeRangeComboBox.TabIndex = 5;
+            // zamanAraligiKutusu
+            this.zamanAraligiKutusu.Location = new System.Drawing.Point(370, 10);
+            this.zamanAraligiKutusu.Size = new System.Drawing.Size(120, 30);
+            this.zamanAraligiKutusu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.zamanAraligiKutusu.BackColor = System.Drawing.Color.FromArgb(60, 60, 60);
+            this.zamanAraligiKutusu.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            this.zamanAraligiKutusu.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            this.zamanAraligiKutusu.Name = "zamanAraligiKutusu";
+            this.zamanAraligiKutusu.TabIndex = 5;
 
             // Form1
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(780, 660);
-            this.Controls.Add(this.timeRangeComboBox);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.zamanAraligiKutusu);
+            this.Controls.Add(this.dugme4);
+            this.Controls.Add(this.dugme3);
+            this.Controls.Add(this.dugme2);
+            this.Controls.Add(this.dugme1);
+            this.Controls.Add(this.sekmeKontrolu);
             this.Name = "Form1";
-            this.Text = "Adam's POWER MANAGEMENT TOOL";
+            this.Text = "Adam'ýn GÜÇ YÖNETÝM ARACI";
             this.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.usageTable)).EndInit();
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormuKapatirken);
+            this.sekmeKontrolu.ResumeLayout(false);
+            this.sekmeSayfasi1.ResumeLayout(false);
+            this.sekmeSayfasi2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.kullanimTablosu)).EndInit();
             this.ResumeLayout(false);
         }
 
-        private void SetupTimeRangeComboBox()
+        private void ZamanAraligiKutusunuKur()
         {
-            timeRangeComboBox?.Items.AddRange(new object[] { "1 Dakika", "5 Dakika", "30 Dakika", "1 Saat", "2 Saat", "4 Saat", "10 Saat", "1 Gün", "1 Hafta" });
-            timeRangeComboBox!.SelectedIndex = 1;
-            timeRangeComboBox.SelectedIndexChanged += (object? sender, EventArgs e) =>
+            zamanAraligiKutusu?.Items.AddRange(new object[] { "1 Dakika", "5 Dakika", "30 Dakika", "1 Saat", "2 Saat", "4 Saat", "10 Saat", "1 Gün", "1 Hafta" });
+            zamanAraligiKutusu!.SelectedIndex = 1;
+            zamanAraligiKutusu.SelectedIndexChanged += (object? sender, EventArgs e) =>
             {
-                monitorGraph!.SelectedTimeRange = timeRangeComboBox.SelectedIndex switch
+                izlemeGrafik!.SeciliZamanAraligi = zamanAraligiKutusu.SelectedIndex switch
                 {
                     0 => TimeSpan.FromMinutes(1),
                     1 => TimeSpan.FromMinutes(5),
@@ -322,149 +322,149 @@ namespace AdamPowerTool
             };
         }
 
-        private void SetupUsageTable()
+        private void KullanimTablosunuKur()
         {
-            usageTable?.Columns.Add("Metric", "Ölçüm");
-            usageTable?.Columns.Add("Value", "Deðer");
-            usageTable!.Columns["Metric"].Width = 200;
-            usageTable.Columns["Value"].Width = 90;
+            kullanimTablosu?.Columns.Add("Metrik", "Ölçüm");
+            kullanimTablosu?.Columns.Add("Deger", "Deðer");
+            kullanimTablosu!.Columns["Metrik"].Width = 200;
+            kullanimTablosu.Columns["Deger"].Width = 90;
 
-            var tableTimer = new System.Windows.Forms.Timer { Interval = 2000 };
-            tableTimer.Tick += (object? sender, EventArgs e) => UpdateUsageTable();
-            tableTimer.Start();
+            var tabloZamanlayici = new System.Windows.Forms.Timer { Interval = 2000 };
+            tabloZamanlayici.Tick += (object? sender, EventArgs e) => KullanimTablosunuGuncelle();
+            tabloZamanlayici.Start();
 
-            UpdateUsageTable();
+            KullanimTablosunuGuncelle();
         }
 
-        private void SetupTemperatureUpdates()
+        private void SicaklikGuncellemeleriniKur()
         {
-            var tempTimer = new System.Windows.Forms.Timer { Interval = 2000 };
-            tempTimer.Tick += (object? sender, EventArgs e) => UpdateTemperature();
-            tempTimer.Start();
+            var sicaklikZamanlayici = new System.Windows.Forms.Timer { Interval = 2000 };
+            sicaklikZamanlayici.Tick += (object? sender, EventArgs e) => SicakligiGuncelle();
+            sicaklikZamanlayici.Start();
 
-            UpdateTemperature();
+            SicakligiGuncelle();
         }
 
-        private void UpdateTemperature()
+        private void SicakligiGuncelle()
         {
             try
             {
-                var systemData = BilgisayarBilgileri.GetSystemData(TimeSpan.FromMinutes(5)) as SystemData;
-                if (systemData == null)
+                var sistemVerileri = BilgisayarBilgileri.GetSystemData(TimeSpan.FromMinutes(5)) as SistemVerileri;
+                if (sistemVerileri == null)
                 {
                     throw new Exception("Sistem verileri alýnamadý.");
                 }
 
-                double cpuTemp = systemData.cpuTemp ?? 0.0;
-                double gpuTemp = systemData.gpuTemp ?? 0.0;
+                double islemciSicakligi = sistemVerileri.islemciSicakligi ?? 0.0;
+                double ekranKartiSicakligi = sistemVerileri.ekranKartiSicakligi ?? 0.0;
 
-                cpuTempLabel!.Text = $"{cpuTemp:F1}°C";
-                gpuTempLabel!.Text = $"{gpuTemp:F1}°C";
+                islemciSicaklikEtiketi!.Text = $"{islemciSicakligi:F1}°C";
+                ekranKartiSicaklikEtiketi!.Text = $"{ekranKartiSicakligi:F1}°C";
 
-                cpuTempLabel.BackColor = GetTemperatureColor(cpuTemp);
-                gpuTempLabel.BackColor = GetTemperatureColor(gpuTemp);
+                islemciSicaklikEtiketi.BackColor = SicaklikRengiAl(islemciSicakligi);
+                ekranKartiSicaklikEtiketi.BackColor = SicaklikRengiAl(ekranKartiSicakligi);
             }
             catch (Exception ex)
             {
                 ErrorHandler.HandleError(ex, ErrorHandler.ErrorMessages.DataFetchError);
-                cpuTempLabel!.Text = "N/A";
-                gpuTempLabel!.Text = "N/A";
-                cpuTempLabel.BackColor = Color.Gray;
-                gpuTempLabel.BackColor = Color.Gray;
+                islemciSicaklikEtiketi!.Text = "N/A";
+                ekranKartiSicaklikEtiketi!.Text = "N/A";
+                islemciSicaklikEtiketi.BackColor = Color.Gray;
+                ekranKartiSicaklikEtiketi.BackColor = Color.Gray;
             }
         }
 
-        private Color GetTemperatureColor(double temp)
+        private Color SicaklikRengiAl(double sicaklik)
         {
-            if (temp <= 40) return Color.FromArgb(0, 255, 0);
-            if (temp <= 60) return Color.FromArgb(255, 255, 0);
-            if (temp <= 80) return Color.FromArgb(255, 165, 0);
+            if (sicaklik <= 40) return Color.FromArgb(0, 255, 0);
+            if (sicaklik <= 60) return Color.FromArgb(255, 255, 0);
+            if (sicaklik <= 80) return Color.FromArgb(255, 165, 0);
             return Color.FromArgb(255, 0, 0);
         }
 
-        private void UpdateUsageTable()
+        private void KullanimTablosunuGuncelle()
         {
             try
             {
-                var systemData = BilgisayarBilgileri.GetSystemData(TimeSpan.FromMinutes(5)) as SystemData;
-                if (systemData == null)
+                var sistemVerileri = BilgisayarBilgileri.GetSystemData(TimeSpan.FromMinutes(5)) as SistemVerileri;
+                if (sistemVerileri == null)
                 {
                     throw new Exception("Sistem verileri alýnamadý.");
                 }
 
-                usageTable!.Rows.Clear();
-                usageTable.Rows.Add("CPU Kullanýmý (%)", systemData.cpuData.Count > 0 ? $"{systemData.cpuData[^1].value:F1}" : "0.0");
-                usageTable.Rows.Add("RAM Kullanýmý (%)", systemData.ramData.Count > 0 ? $"{systemData.ramData[^1].value:F1}" : "0.0");
-                usageTable.Rows.Add("Disk Aktivitesi (ölçekli)", systemData.diskData.Count > 0 ? $"{systemData.diskData[^1].value:F1}" : "0.0");
-                usageTable.Rows.Add("GPU Kullanýmý (%)", systemData.gpuData.Count > 0 ? $"{systemData.gpuData[^1].value:F1}" : "0.0");
+                kullanimTablosu!.Rows.Clear();
+                kullanimTablosu.Rows.Add("Ýþlemci Kullanýmý (%)", sistemVerileri.islemciVerileri.Count > 0 ? $"{sistemVerileri.islemciVerileri[^1].deger:F1}" : "0.0");
+                kullanimTablosu.Rows.Add("RAM Kullanýmý (%)", sistemVerileri.ramVerileri.Count > 0 ? $"{sistemVerileri.ramVerileri[^1].deger:F1}" : "0.0");
+                kullanimTablosu.Rows.Add("Disk Aktivitesi (ölçekli)", sistemVerileri.diskVerileri.Count > 0 ? $"{sistemVerileri.diskVerileri[^1].deger:F1}" : "0.0");
+                kullanimTablosu.Rows.Add("Ekran Kartý Kullanýmý (%)", sistemVerileri.ekranKartiVerileri.Count > 0 ? $"{sistemVerileri.ekranKartiVerileri[^1].deger:F1}" : "0.0");
             }
             catch (Exception ex)
             {
                 ErrorHandler.HandleError(ex, ErrorHandler.ErrorMessages.DataFetchError);
-                usageTable!.Rows.Clear();
-                usageTable.Rows.Add("CPU Kullanýmý (%)", "N/A");
-                usageTable.Rows.Add("RAM Kullanýmý (%)", "N/A");
-                usageTable.Rows.Add("Disk Aktivitesi (ölçekli)", "N/A");
-                usageTable.Rows.Add("GPU Kullanýmý (%)", "N/A");
+                kullanimTablosu!.Rows.Clear();
+                kullanimTablosu.Rows.Add("Ýþlemci Kullanýmý (%)", "N/A");
+                kullanimTablosu.Rows.Add("RAM Kullanýmý (%)", "N/A");
+                kullanimTablosu.Rows.Add("Disk Aktivitesi (ölçekli)", "N/A");
+                kullanimTablosu.Rows.Add("Ekran Kartý Kullanýmý (%)", "N/A");
             }
         }
 
-        private void button1_Click(object? sender, EventArgs e)
+        private void Dugme1_Tikla(object? sender, EventArgs e)
         {
-            tabControl1!.SelectedIndex = 0;
+            sekmeKontrolu!.SelectedIndex = 0;
         }
 
-        private void button2_Click(object? sender, EventArgs e)
+        private void Dugme2_Tikla(object? sender, EventArgs e)
         {
-            tabControl1!.SelectedIndex = 1;
+            sekmeKontrolu!.SelectedIndex = 1;
         }
 
-        private void button3_Click(object? sender, EventArgs e)
+        private void Dugme3_Tikla(object? sender, EventArgs e)
         {
-            tabControl1!.SelectedIndex = 2;
+            sekmeKontrolu!.SelectedIndex = 2;
         }
 
-        private void button4_Click(object? sender, EventArgs e)
+        private void Dugme4_Tikla(object? sender, EventArgs e)
         {
-            tabControl1!.SelectedIndex = 3;
+            sekmeKontrolu!.SelectedIndex = 3;
         }
 
-        private void button_MouseEnter(object? sender, EventArgs e)
+        private void Dugme_UzerineGel(object? sender, EventArgs e)
         {
-            var button = sender as Button;
-            if (button != null)
+            var dugme = sender as Button;
+            if (dugme != null)
             {
-                button.ForeColor = Color.FromArgb(255, 50, 50); // Daha parlak kýrmýzý
-                button.FlatAppearance.BorderColor = Color.FromArgb(255, 50, 50);
+                dugme.ForeColor = Color.FromArgb(255, 50, 50);
+                dugme.FlatAppearance.BorderColor = Color.FromArgb(255, 50, 50);
             }
         }
 
-        private void button_MouseLeave(object? sender, EventArgs e)
+        private void Dugme_Ayril(object? sender, EventArgs e)
         {
-            var button = sender as Button;
-            if (button != null)
+            var dugme = sender as Button;
+            if (dugme != null)
             {
-                button.ForeColor = Color.FromArgb(255, 0, 0); // Orijinal kýrmýzý
-                button.FlatAppearance.BorderColor = Color.FromArgb(255, 0, 0);
+                dugme.ForeColor = Color.FromArgb(255, 0, 0);
+                dugme.FlatAppearance.BorderColor = Color.FromArgb(255, 0, 0);
             }
         }
 
-        private void tabPage1_Enter(object? sender, EventArgs e)
+        private void SekmeSayfasi1_Giris(object? sender, EventArgs e)
         {
             try
             {
-                systemInfoLabel!.Text = BilgisayarBilgileri.GetBilgi() ?? "Sistem bilgileri alýnamadý.";
+                sistemBilgiEtiketi!.Text = BilgisayarBilgileri.GetBilgi() ?? "Sistem bilgileri alýnamadý.";
             }
             catch (Exception ex)
             {
                 ErrorHandler.HandleError(ex, ErrorHandler.ErrorMessages.DataFetchError);
-                systemInfoLabel!.Text = "Sistem bilgileri alýnamadý.";
+                sistemBilgiEtiketi!.Text = "Sistem bilgileri alýnamadý.";
             }
         }
 
-        protected override void OnFormClosing(FormClosingEventArgs e)
+        protected override void FormuKapatirken(FormClosingEventArgs e)
         {
-            monitorGraph?.StopUpdating();
+            izlemeGrafik?.GuncellemeyiDurdur();
             base.OnFormClosing(e);
         }
     }

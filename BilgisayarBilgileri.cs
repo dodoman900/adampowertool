@@ -1,48 +1,59 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 
 namespace AdamPowerTool
 {
-    public class SystemData
-    {
-        public List<(DateTime time, double value)> cpuData { get; set; }
-        public List<(DateTime time, double value)> ramData { get; set; }
-        public List<(DateTime time, double value)> diskData { get; set; }
-        public List<(DateTime time, double value)> gpuData { get; set; }
-        public List<(DateTime time, double value)> powerData { get; set; }
-        public double? cpuTemp { get; set; }
-        public double? gpuTemp { get; set; }
-
-        public SystemData()
-        {
-            cpuData = new List<(DateTime, double)>();
-            ramData = new List<(DateTime, double)>();
-            diskData = new List<(DateTime, double)>();
-            gpuData = new List<(DateTime, double)>();
-            powerData = new List<(DateTime, double)>();
-            cpuTemp = null;
-            gpuTemp = null;
-        }
-    }
-
     public static class BilgisayarBilgileri
     {
-        public static SystemData GetSystemData(TimeSpan timeRange)
+        private static readonly Random random = new Random();
+
+        public static object? GetSystemData(TimeSpan zamanAraligi)
         {
-            var data = new SystemData();
-            data.cpuData.Add((DateTime.Now, 22.0));
-            data.ramData.Add((DateTime.Now, 78.1));
-            data.diskData.Add((DateTime.Now, 100.0));
-            data.gpuData.Add((DateTime.Now, 5.0));
-            data.powerData.Add((DateTime.Now, 45.0));
-            data.cpuTemp = 0.0;
-            data.gpuTemp = 0.0;
-            return data;
+            try
+            {
+                var sistemVerileri = new SistemVerileri();
+                DateTime bitisZamani = DateTime.Now;
+                DateTime baslangicZamani = bitisZamani - zamanAraligi;
+
+                for (DateTime zaman = baslangicZamani; zaman <= bitisZamani; zaman = zaman.AddSeconds(10))
+                {
+                    sistemVerileri.islemciVerileri.Add((zaman, random.NextDouble() * 100));
+                    sistemVerileri.ramVerileri.Add((zaman, random.NextDouble() * 100));
+                    sistemVerileri.diskVerileri.Add((zaman, random.NextDouble() * 100));
+                    sistemVerileri.ekranKartiVerileri.Add((zaman, random.NextDouble() * 100));
+                    sistemVerileri.gucVerileri.Add((zaman, random.NextDouble() * 300));
+                }
+
+                sistemVerileri.islemciSicakligi = random.NextDouble() * 80;
+                sistemVerileri.ekranKartiSicakligi = random.NextDouble() * 80;
+
+                return sistemVerileri;
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.HandleError(ex, ErrorHandler.ErrorMessages.DataFetchError);
+                return null;
+            }
         }
 
-        public static string GetBilgi()
+        public static string? GetBilgi()
         {
-            return "Test sistem bilgisi";
+            try
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine("Sistem Bilgileri:");
+                sb.AppendLine($"İşletim Sistemi: {Environment.OSVersion}");
+                sb.AppendLine($"Bilgisayar Adı: {Environment.MachineName}");
+                sb.AppendLine($"Kullanıcı Adı: {Environment.UserName}");
+                sb.AppendLine($"İşlemci Sayısı: {Environment.ProcessorCount}");
+                return sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.HandleError(ex, ErrorHandler.ErrorMessages.DataFetchError);
+                return null;
+            }
         }
     }
 }
