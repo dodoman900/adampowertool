@@ -306,19 +306,22 @@ namespace AdamPowerTool
             zamanAraligiKutusu!.SelectedIndex = 1;
             zamanAraligiKutusu.SelectedIndexChanged += (object? sender, EventArgs e) =>
             {
-                izlemeGrafik!.SeciliZamanAraligi = zamanAraligiKutusu.SelectedIndex switch
+                if (izlemeGrafik != null)
                 {
-                    0 => TimeSpan.FromMinutes(1),
-                    1 => TimeSpan.FromMinutes(5),
-                    2 => TimeSpan.FromMinutes(30),
-                    3 => TimeSpan.FromHours(1),
-                    4 => TimeSpan.FromHours(2),
-                    5 => TimeSpan.FromHours(4),
-                    6 => TimeSpan.FromHours(10),
-                    7 => TimeSpan.FromDays(1),
-                    8 => TimeSpan.FromDays(7),
-                    _ => TimeSpan.FromMinutes(5)
-                };
+                    izlemeGrafik.SeciliZamanAraligi = zamanAraligiKutusu.SelectedIndex switch
+                    {
+                        0 => TimeSpan.FromMinutes(1),
+                        1 => TimeSpan.FromMinutes(5),
+                        2 => TimeSpan.FromMinutes(30),
+                        3 => TimeSpan.FromHours(1),
+                        4 => TimeSpan.FromHours(2),
+                        5 => TimeSpan.FromHours(4),
+                        6 => TimeSpan.FromHours(10),
+                        7 => TimeSpan.FromDays(1),
+                        8 => TimeSpan.FromDays(7),
+                        _ => TimeSpan.FromMinutes(5)
+                    };
+                }
             };
         }
 
@@ -366,7 +369,7 @@ namespace AdamPowerTool
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError(ex, ErrorHandler.ErrorMessages.DataFetchError);
+                HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.VeriAlmaHatasi);
                 islemciSicaklikEtiketi!.Text = "N/A";
                 ekranKartiSicaklikEtiketi!.Text = "N/A";
                 islemciSicaklikEtiketi.BackColor = Color.Gray;
@@ -400,7 +403,7 @@ namespace AdamPowerTool
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError(ex, ErrorHandler.ErrorMessages.DataFetchError);
+                HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.VeriAlmaHatasi);
                 kullanimTablosu!.Rows.Clear();
                 kullanimTablosu.Rows.Add("Ýþlemci Kullanýmý (%)", "N/A");
                 kullanimTablosu.Rows.Add("RAM Kullanýmý (%)", "N/A");
@@ -457,15 +460,14 @@ namespace AdamPowerTool
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError(ex, ErrorHandler.ErrorMessages.DataFetchError);
+                HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.VeriAlmaHatasi);
                 sistemBilgiEtiketi!.Text = "Sistem bilgileri alýnamadý.";
             }
         }
 
-        protected override void FormuKapatirken(FormClosingEventArgs e)
+        private void FormuKapatirken(object sender, FormClosingEventArgs e)
         {
             izlemeGrafik?.GuncellemeyiDurdur();
-            base.OnFormClosing(e);
         }
     }
 }

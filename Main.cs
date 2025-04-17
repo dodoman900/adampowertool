@@ -3,17 +3,14 @@ using System.Windows.Forms;
 
 namespace AdamPowerTool
 {
-    public static class HataYoneticisi
+    static class Program
     {
-        public static class HataMesajlari
+        [STAThread]
+        static void Baslat()
         {
-            public const string VeriAlmaHatasi = "Veri alýnýrken bir hata oluþtu.";
-            public const string GrafikCizimHatasi = "Grafik çizimi sýrasýnda bir hata oluþtu.";
-        }
-
-        public static void HataEleAl(Exception? hata, string mesaj)
-        {
-            MessageBox.Show($"{mesaj}\nHata: {hata?.Message ?? "Bilinmeyen hata"}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Form1());
         }
     }
 }

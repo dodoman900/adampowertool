@@ -32,7 +32,7 @@ namespace AdamPowerTool
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError(ex, ErrorHandler.ErrorMessages.DataFetchError);
+                HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.VeriAlmaHatasi);
                 return null;
             }
         }
@@ -51,7 +51,7 @@ namespace AdamPowerTool
             }
             catch (Exception ex)
             {
-                ErrorHandler.HandleError(ex, ErrorHandler.ErrorMessages.DataFetchError);
+                HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.VeriAlmaHatasi);
                 return null;
             }
         }
