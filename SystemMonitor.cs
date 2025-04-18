@@ -12,11 +12,10 @@ namespace AdamPowerTool
         private readonly PerformanceCounter cpuCounter;
         private readonly PerformanceCounter ramCounter;
         private readonly PerformanceCounter diskCounter;
-        private readonly PerformanceCounter gpuCounter;
 
         public SystemMonitor()
         {
-            guncellemeZamanlayici.Interval = 1000; // 1 saniyede bir güncelle
+            guncellemeZamanlayici.Interval = 1000;
             arsivVerileri = YukleArsiv() ?? new SistemVerileri();
 
             try
@@ -24,9 +23,6 @@ namespace AdamPowerTool
                 cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
                 ramCounter = new PerformanceCounter("Memory", "% Committed Bytes In Use");
                 diskCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
-
-                // GPU kullanımı için Performance Counter (NVIDIA için örnek)
-                gpuCounter = new PerformanceCounter("GPU Engine", "Utilization Percentage", "pid_0_luid_0x00000000_0x0000XXXX"); // GPU için dinamik olarak ayarlanmalı
             }
             catch (Exception ex)
             {
@@ -48,27 +44,19 @@ namespace AdamPowerTool
             {
                 DateTime zaman = DateTime.Now;
 
-                // CPU Kullanımı
                 float cpuKullanimi = cpuCounter.NextValue();
                 arsivVerileri.islemciVerileri.Add((zaman, cpuKullanimi));
 
-                // RAM Kullanımı
                 float ramKullanimi = ramCounter.NextValue();
                 arsivVerileri.ramVerileri.Add((zaman, ramKullanimi));
 
-                // Disk Kullanımı
                 float diskKullanimi = diskCounter.NextValue();
                 arsivVerileri.diskVerileri.Add((zaman, diskKullanimi));
 
-                // GPU Kullanımı (Not: GPU counter dinamik olarak ayarlanmalı)
-                float gpuKullanimi = 0; // gpuCounter.NextValue(); // Şu an için sıfır, dinamik ayar gerekecek
-                arsivVerileri.ekranKartiVerileri.Add((zaman, gpuKullanimi));
+                // GPU ve Güç simüle (gerçek ölçüm için ek kütüphane gerek)
+                arsivVerileri.ekranKartiVerileri.Add((zaman, new Random().Next(0, 100)));
+                arsivVerileri.gucVerileri.Add((zaman, new Random().Next(50, 300)));
 
-                // Güç Kullanımı (Simüle, çünkü direkt ölçüm için donanım erişimi gerek)
-                double gucKullanimi = new Random().Next(50, 300); // Gerçek ölçüm için ek kütüphane gerekir
-                arsivVerileri.gucVerileri.Add((zaman, gucKullanimi));
-
-                // Eski verileri temizle (1 haftadan eski)
                 DateTime birHaftaOnce = DateTime.Now.AddDays(-7);
                 arsivVerileri.islemciVerileri.RemoveAll(v => v.zaman < birHaftaOnce);
                 arsivVerileri.ramVerileri.RemoveAll(v => v.zaman < birHaftaOnce);
@@ -80,7 +68,7 @@ namespace AdamPowerTool
             }
             catch (Exception ex)
             {
-                HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.VeriAlmaHatasi);
+                HataYoneticisi.HataEleAl(ex, "Veri alınamadı.");
             }
         }
 
@@ -98,7 +86,7 @@ namespace AdamPowerTool
             }
             catch (Exception ex)
             {
-                HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.VeriKaydetmeHatasi);
+                HataYoneticisi.HataEleAl(ex, "Veri kaydedilemedi.");
             }
         }
 
@@ -114,7 +102,7 @@ namespace AdamPowerTool
             }
             catch (Exception ex)
             {
-                HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.VeriYuklemeHatasi);
+                HataYoneticisi.HataEleAl(ex, "Veri yüklenemedi.");
             }
             return null;
         }
