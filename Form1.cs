@@ -24,8 +24,9 @@ namespace AdamPowerTool
             ZamanAraligiKutusunuKur();
             sistemMonitor = new SystemMonitor(this);
             sistemMonitor.GuncellemeleriKur();
-            sistemGrafik.GuncellemeyiBaslat();
             SistemBilgiTablosunuDoldur();
+            // Varsayýlan olarak sistem bilgileri sekmesini göster
+            Dugme1_Tikla(null, EventArgs.Empty);
         }
 
         protected override void Dispose(bool disposing)
@@ -229,6 +230,7 @@ namespace AdamPowerTool
             sistemGrafik.Visible = false;
             anlikGucEtiketi.Visible = false;
             ortalamaGucEtiketi.Visible = false;
+            sistemGrafik.GuncellemeyiDurdur();
         }
 
         private void Dugme2_Tikla(object? sender, EventArgs e)
@@ -237,6 +239,7 @@ namespace AdamPowerTool
             sistemGrafik.Visible = true;
             anlikGucEtiketi.Visible = true;
             ortalamaGucEtiketi.Visible = true;
+            sistemGrafik.GuncellemeyiBaslat();
         }
 
         private void Dugme3_Tikla(object? sender, EventArgs e)
@@ -245,6 +248,7 @@ namespace AdamPowerTool
             sistemGrafik.Visible = false;
             anlikGucEtiketi.Visible = false;
             ortalamaGucEtiketi.Visible = false;
+            sistemGrafik.GuncellemeyiDurdur();
         }
 
         private void Dugme4_Tikla(object? sender, EventArgs e)
@@ -253,6 +257,7 @@ namespace AdamPowerTool
             sistemGrafik.Visible = false;
             anlikGucEtiketi.Visible = false;
             ortalamaGucEtiketi.Visible = false;
+            sistemGrafik.GuncellemeyiDurdur();
         }
 
         private void Dugme_UzerineGel(object? sender, EventArgs e)

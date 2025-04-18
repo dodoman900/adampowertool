@@ -7,11 +7,11 @@ namespace AdamPowerTool
 {
     public class SystemMonitor
     {
-        private readonly Form1 form;
+        private readonly Form1? form;
         private readonly System.Windows.Forms.Timer guncellemeZamanlayici = new();
         private SistemVerileri arsivVerileri;
 
-        public SystemMonitor(Form1 form)
+        public SystemMonitor(Form1? form = null)
         {
             this.form = form;
             guncellemeZamanlayici.Interval = 2000;
@@ -44,7 +44,7 @@ namespace AdamPowerTool
                 }
                 double ortalamaGuc = sistemVerileri.gucVerileri.Count > 0 ? toplamGuc / sistemVerileri.gucVerileri.Count : 0.0;
 
-                form.GucBilgileriniGuncelle(anlikGuc, ortalamaGuc);
+                form?.GucBilgileriniGuncelle(anlikGuc, ortalamaGuc);
 
                 // Arşive ekle
                 arsivVerileri.islemciVerileri.AddRange(sistemVerileri.islemciVerileri);
@@ -64,7 +64,7 @@ namespace AdamPowerTool
             catch (Exception ex)
             {
                 HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.VeriAlmaHatasi);
-                form.GucBilgileriniGuncelle(0.0, 0.0);
+                form?.GucBilgileriniGuncelle(0.0, 0.0);
             }
         }
 
