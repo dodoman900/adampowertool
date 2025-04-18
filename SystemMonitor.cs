@@ -1,26 +1,23 @@
 ﻿using System;
 using System.IO;
 using System.Text.Json;
-using System.Windows.Forms;
 
 namespace AdamPowerTool
 {
     public class SystemMonitor
     {
-        private readonly Form1? form;
         private readonly System.Windows.Forms.Timer guncellemeZamanlayici = new();
         private SistemVerileri arsivVerileri;
 
-        public SystemMonitor(Form1? form = null)
+        public SystemMonitor()
         {
-            this.form = form;
             guncellemeZamanlayici.Interval = 2000;
             arsivVerileri = YukleArsiv() ?? new SistemVerileri();
         }
 
         public void GuncellemeleriKur()
         {
-            guncellemeZamanlayici.Tick += (object? sender, EventArgs e) => VerileriGuncelle();
+            guncellemeZamanlayici.Tick += (s, e) => VerileriGuncelle();
             guncellemeZamanlayici.Start();
             VerileriGuncelle();
         }
@@ -29,24 +26,10 @@ namespace AdamPowerTool
         {
             try
             {
-                var sistemVerileri = BilgisayarBilgileri.GetSystemData(TimeSpan.FromMinutes(5)) as SistemVerileri;
+                var sistemVerileri = BilgisayarBilgileri.GetSystemData(TimeSpan.FromMinutes(5));
                 if (sistemVerileri == null)
-                {
-                    throw new Exception("Sistem verileri alınamadı.");
-                }
+                    return;
 
-                // Anlık güç ve ortalama güç
-                double anlikGuc = sistemVerileri.gucVerileri.Count > 0 ? sistemVerileri.gucVerileri[^1].deger : 0.0;
-                double toplamGuc = 0.0;
-                foreach (var veri in sistemVerileri.gucVerileri)
-                {
-                    toplamGuc += veri.deger;
-                }
-                double ortalamaGuc = sistemVerileri.gucVerileri.Count > 0 ? toplamGuc / sistemVerileri.gucVerileri.Count : 0.0;
-
-                form?.GucBilgileriniGuncelle(anlikGuc, ortalamaGuc);
-
-                // Arşive ekle
                 arsivVerileri.islemciVerileri.AddRange(sistemVerileri.islemciVerileri);
                 arsivVerileri.ramVerileri.AddRange(sistemVerileri.ramVerileri);
                 arsivVerileri.diskVerileri.AddRange(sistemVerileri.diskVerileri);
@@ -60,11 +43,12 @@ namespace AdamPowerTool
                 arsivVerileri.diskVerileri.RemoveAll(v => v.zaman < birHaftaOnce);
                 arsivVerileri.ekranKartiVerileri.RemoveAll(v => v.zaman < birHaftaOnce);
                 arsivVerileri.gucVerileri.RemoveAll(v => v.zaman < birHaftaOnce);
+
+                Kaydet();
             }
             catch (Exception ex)
             {
                 HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.VeriAlmaHatasi);
-                form?.GucBilgileriniGuncelle(0.0, 0.0);
             }
         }
 
