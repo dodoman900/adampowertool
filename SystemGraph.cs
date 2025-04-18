@@ -13,14 +13,14 @@ namespace AdamPowerTool
         private readonly List<(DateTime zaman, double deger)> ekranKartiVerileri = new();
         private readonly List<(DateTime zaman, double deger)> gucVerileri = new();
         private readonly System.Windows.Forms.Timer guncellemeZamanlayici = new();
-        private TimeSpan seciliZamanAraligi = TimeSpan.FromMinutes(5);
+        private TimeSpan seciliZamanAraligi = TimeSpan.FromMinutes(1); // Görev Yöneticisi gibi 1 dakikalık pencere
 
         public TimeSpan SeciliZamanAraligi
         {
             get => seciliZamanAraligi;
             set
             {
-                seciliZamanAraligi = value > TimeSpan.Zero ? value : TimeSpan.FromMinutes(5);
+                seciliZamanAraligi = value > TimeSpan.Zero ? value : TimeSpan.FromMinutes(1);
                 Invalidate();
             }
         }
@@ -28,10 +28,9 @@ namespace AdamPowerTool
         public SystemGraph()
         {
             DoubleBuffered = true;
-            guncellemeZamanlayici.Interval = 2000;
+            guncellemeZamanlayici.Interval = 1000; // 1 saniyede bir güncelle
             guncellemeZamanlayici.Tick += (s, e) => Guncelle();
             Size = new Size(760, 500);
-            VerileriSimuleEt(); // İlk açılışta test verileri
         }
 
         public void GuncellemeyiBaslat()
@@ -44,33 +43,13 @@ namespace AdamPowerTool
             guncellemeZamanlayici.Stop();
         }
 
-        private void VerileriSimuleEt()
-        {
-            var rastgele = new Random();
-            DateTime simdi = DateTime.Now;
-            int veriSayisi = (int)(seciliZamanAraligi.TotalSeconds / 2);
-            for (int i = 0; i < veriSayisi; i++)
-            {
-                DateTime zaman = simdi.AddSeconds(-2 * i);
-                if (zaman < DateTime.MinValue.AddDays(1)) break;
-                islemciVerileri.Add((zaman, Math.Min(100, Math.Max(0, rastgele.NextDouble() * 90 + 10))));
-                ramVerileri.Add((zaman, Math.Min(100, Math.Max(0, rastgele.NextDouble() * 60 + 20))));
-                diskVerileri.Add((zaman, Math.Min(100, Math.Max(0, rastgele.NextDouble() * 50))));
-                ekranKartiVerileri.Add((zaman, Math.Min(100, Math.Max(0, rastgele.NextDouble() * 65 + 5))));
-                gucVerileri.Add((zaman, Math.Min(300, Math.Max(50, rastgele.NextDouble() * 200 + 50))));
-            }
-        }
-
         private void Guncelle()
         {
             try
             {
                 var sistemVerileri = new SystemMonitor().GetArsivVerileri();
                 if (sistemVerileri == null)
-                {
-                    VerileriSimuleEt();
                     return;
-                }
 
                 islemciVerileri.Clear();
                 ramVerileri.Clear();
@@ -89,7 +68,6 @@ namespace AdamPowerTool
             catch (Exception ex)
             {
                 HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.VeriAlmaHatasi);
-                VerileriSimuleEt(); // Hata olsa bile grafikler boş kalmasın
             }
         }
 
@@ -99,7 +77,7 @@ namespace AdamPowerTool
             var g = e.Graphics;
             g.Clear(Color.FromArgb(27, 27, 27));
 
-            if (islemciVerileri.Count < 2 && ramVerileri.Count < 2 && gucVerileri.Count < 2)
+            if (islemciVerileri.Count < 2 && ramVerileri.Count < 2)
             {
                 using var hataFont = new Font("Montserrat", 10);
                 g.DrawString("Veri bekleniyor...", hataFont, Brushes.White, 10, 10);
@@ -107,23 +85,20 @@ namespace AdamPowerTool
             }
 
             float solBosluk = 10;
-            float cpuRamGenislik = (Width - 30) * 0.6f;
-            float gucGenislik = (Width - 30) * 0.4f;
-            float cpuRamYukseklik = Height * 0.5f;
-            float diskGpuYukseklik = Height * 0.2f;
+            float grafikGenislik = (Width - 30);
+            float grafikYukseklik = (Height - 50) / 5; // 5 grafik için böl
 
             DateTime bitisZamani = DateTime.Now;
             DateTime baslangicZamani = bitisZamani.Subtract(seciliZamanAraligi);
             if (baslangicZamani < DateTime.MinValue.AddDays(1))
                 baslangicZamani = DateTime.MinValue.AddDays(1);
 
-            g.DrawRectangle(new Pen(Color.Gray, 2), solBosluk, 10, cpuRamGenislik, cpuRamYukseklik - 20);
-            g.DrawRectangle(new Pen(Color.Gray, 2), solBosluk, cpuRamYukseklik + 10, cpuRamGenislik, diskGpuYukseklik - 20);
-            g.DrawRectangle(new Pen(Color.Gray, 2), solBosluk, cpuRamYukseklik + diskGpuYukseklik + 10, cpuRamGenislik, diskGpuYukseklik - 20);
-            g.DrawRectangle(new Pen(Color.Gray, 2), solBosluk + cpuRamGenislik + 10, 10, gucGenislik, Height - 20);
-
-            void GrafikCiz(List<(DateTime zaman, double deger)> veriler, Color renk, float xOffset, float yOffset, float genislik, float yukseklik, double maxDeger)
+            void GrafikCiz(List<(DateTime zaman, double deger)> veriler, Color renk, float yOffset, string etiket, double maxDeger)
             {
+                // Çerçeve
+                g.DrawRectangle(new Pen(Color.Gray, 1), solBosluk, yOffset, grafikGenislik, grafikYukseklik - 10);
+
+                // Veri noktaları
                 var noktalar = new List<PointF>();
                 double toplamSaniye = seciliZamanAraligi.TotalSeconds;
                 if (toplamSaniye <= 0) toplamSaniye = 1;
@@ -133,8 +108,8 @@ namespace AdamPowerTool
                     if (zaman < baslangicZamani || zaman > bitisZamani || double.IsNaN(deger) || double.IsInfinity(deger))
                         continue;
                     double saniyeFarki = (zaman - baslangicZamani).TotalSeconds;
-                    float x = xOffset + (float)(saniyeFarki / toplamSaniye * genislik);
-                    float y = yOffset + (float)(1 - deger / maxDeger) * (yukseklik - 20);
+                    float x = solBosluk + (float)(saniyeFarki / toplamSaniye * grafikGenislik);
+                    float y = yOffset + (float)(1 - deger / maxDeger) * (grafikYukseklik - 10);
                     if (float.IsNaN(x) || float.IsNaN(y) || float.IsInfinity(x) || float.IsInfinity(y))
                         continue;
                     noktalar.Add(new PointF(x, y));
@@ -142,19 +117,18 @@ namespace AdamPowerTool
 
                 if (noktalar.Count > 1)
                     g.DrawLines(new Pen(renk, 2), noktalar.ToArray());
+
+                // Etiket
+                using var etiketFont = new Font("Montserrat", 8);
+                g.DrawString(etiket, etiketFont, Brushes.White, solBosluk, yOffset - 10);
             }
 
-            GrafikCiz(islemciVerileri, Color.Green, solBosluk, 10, cpuRamGenislik, cpuRamYukseklik, 100);
-            GrafikCiz(ramVerileri, Color.Red, solBosluk, 10, cpuRamGenislik, cpuRamYukseklik, 100);
-            GrafikCiz(diskVerileri, Color.Yellow, solBosluk, cpuRamYukseklik + 10, cpuRamGenislik, diskGpuYukseklik, 100);
-            GrafikCiz(ekranKartiVerileri, Color.Orange, solBosluk, cpuRamYukseklik + diskGpuYukseklik + 10, cpuRamGenislik, diskGpuYukseklik, 100);
-            GrafikCiz(gucVerileri, Color.Cyan, solBosluk + cpuRamGenislik + 10, 10, gucGenislik, Height, 300);
-
-            using var etiketFont = new Font("Montserrat", 8);
-            g.DrawString("CPU + RAM Kullanımı (%)", etiketFont, Brushes.White, solBosluk, 0);
-            g.DrawString("Disk Aktivitesi (ölçekli)", etiketFont, Brushes.White, solBosluk, cpuRamYukseklik);
-            g.DrawString("GPU Kullanımı (%)", etiketFont, Brushes.White, solBosluk, cpuRamYukseklik + diskGpuYukseklik);
-            g.DrawString("Güç Kullanımı (Watt)", etiketFont, Brushes.White, solBosluk + cpuRamGenislik + 10, 0);
+            // Grafikleri çiz (Görev Yöneticisi tarzı, alt alta)
+            GrafikCiz(islemciVerileri, Color.Green, 10, "CPU Kullanımı (%)", 100);
+            GrafikCiz(ramVerileri, Color.Red, 10 + grafikYukseklik, "RAM Kullanımı (%)", 100);
+            GrafikCiz(diskVerileri, Color.Yellow, 10 + grafikYukseklik * 2, "Disk Kullanımı (%)", 100);
+            GrafikCiz(ekranKartiVerileri, Color.Orange, 10 + grafikYukseklik * 3, "GPU Kullanımı (%)", 100);
+            GrafikCiz(gucVerileri, Color.Cyan, 10 + grafikYukseklik * 4, "Güç Kullanımı (Watt)", 300);
         }
     }
 }

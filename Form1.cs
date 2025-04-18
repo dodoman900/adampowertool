@@ -14,15 +14,13 @@ namespace AdamPowerTool
         private readonly System.Windows.Forms.ComboBox zamanAraligiKutusu = new();
         private readonly System.Windows.Forms.DataGridView sistemBilgiTablosu = new();
         private readonly SystemGraph sistemGrafik = new();
-        private readonly System.Windows.Forms.Label anlikGucEtiketi = new();
-        private readonly System.Windows.Forms.Label ortalamaGucEtiketi = new();
         private readonly SystemMonitor sistemMonitor;
 
         public Form1()
         {
             BilesenleriBaslat();
             ZamanAraligiKutusunuKur();
-            sistemMonitor = new SystemMonitor(); // Parametresiz yapýcý
+            sistemMonitor = new SystemMonitor();
             sistemMonitor.GuncellemeleriKur();
             SistemBilgiTablosunuDoldur();
             Dugme1_Tikla(null, EventArgs.Empty); // Varsayýlan sistem bilgileri sekmesi
@@ -144,32 +142,10 @@ namespace AdamPowerTool
             sistemGrafik.Size = new Size(760, 500);
             sistemGrafik.TabIndex = 7;
 
-            // anlikGucEtiketi
-            anlikGucEtiketi.Location = new Point(500, 560);
-            anlikGucEtiketi.Size = new Size(270, 20);
-            anlikGucEtiketi.Text = "Anlýk: 0.0 W";
-            anlikGucEtiketi.TextAlign = ContentAlignment.MiddleLeft;
-            anlikGucEtiketi.ForeColor = Color.Cyan;
-            anlikGucEtiketi.Font = new Font("Montserrat", 10F, FontStyle.Bold);
-            anlikGucEtiketi.Name = "anlikGucEtiketi";
-            anlikGucEtiketi.TabIndex = 8;
-
-            // ortalamaGucEtiketi
-            ortalamaGucEtiketi.Location = new Point(500, 590);
-            ortalamaGucEtiketi.Size = new Size(270, 20);
-            ortalamaGucEtiketi.Text = "Ortalama: 0.0 W";
-            ortalamaGucEtiketi.TextAlign = ContentAlignment.MiddleLeft;
-            ortalamaGucEtiketi.ForeColor = Color.Cyan;
-            ortalamaGucEtiketi.Font = new Font("Montserrat", 10F, FontStyle.Bold);
-            ortalamaGucEtiketi.Name = "ortalamaGucEtiketi";
-            ortalamaGucEtiketi.TabIndex = 9;
-
             // Form1
             AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(780, 660);
-            Controls.Add(anlikGucEtiketi);
-            Controls.Add(ortalamaGucEtiketi);
             Controls.Add(sistemGrafik);
             Controls.Add(sistemBilgiTablosu);
             Controls.Add(zamanAraligiKutusu);
@@ -188,7 +164,7 @@ namespace AdamPowerTool
         private void ZamanAraligiKutusunuKur()
         {
             zamanAraligiKutusu.Items.AddRange(new object[] { "1 Dakika", "5 Dakika", "30 Dakika", "1 Saat", "1 Gün", "1 Hafta" });
-            zamanAraligiKutusu.SelectedIndex = 1;
+            zamanAraligiKutusu.SelectedIndex = 0; // Varsayýlan 1 dakika
             zamanAraligiKutusu.SelectedIndexChanged += (object? sender, EventArgs e) =>
             {
                 var yeniAralik = zamanAraligiKutusu.SelectedIndex switch
@@ -199,7 +175,7 @@ namespace AdamPowerTool
                     3 => TimeSpan.FromHours(1),
                     4 => TimeSpan.FromDays(1),
                     5 => TimeSpan.FromDays(7),
-                    _ => TimeSpan.FromMinutes(5)
+                    _ => TimeSpan.FromMinutes(1)
                 };
                 sistemGrafik.SeciliZamanAraligi = yeniAralik;
             };
@@ -227,8 +203,6 @@ namespace AdamPowerTool
         {
             sistemBilgiTablosu.Visible = true;
             sistemGrafik.Visible = false;
-            anlikGucEtiketi.Visible = false;
-            ortalamaGucEtiketi.Visible = false;
             sistemGrafik.GuncellemeyiDurdur();
         }
 
@@ -236,8 +210,6 @@ namespace AdamPowerTool
         {
             sistemBilgiTablosu.Visible = false;
             sistemGrafik.Visible = true;
-            anlikGucEtiketi.Visible = true;
-            ortalamaGucEtiketi.Visible = true;
             sistemGrafik.GuncellemeyiBaslat();
         }
 
@@ -245,8 +217,6 @@ namespace AdamPowerTool
         {
             sistemBilgiTablosu.Visible = false;
             sistemGrafik.Visible = false;
-            anlikGucEtiketi.Visible = false;
-            ortalamaGucEtiketi.Visible = false;
             sistemGrafik.GuncellemeyiDurdur();
         }
 
@@ -254,8 +224,6 @@ namespace AdamPowerTool
         {
             sistemBilgiTablosu.Visible = false;
             sistemGrafik.Visible = false;
-            anlikGucEtiketi.Visible = false;
-            ortalamaGucEtiketi.Visible = false;
             sistemGrafik.GuncellemeyiDurdur();
         }
 
