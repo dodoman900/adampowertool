@@ -36,7 +36,6 @@ namespace AdamPowerTool
                 arsivVerileri.ekranKartiVerileri.AddRange(sistemVerileri.ekranKartiVerileri);
                 arsivVerileri.gucVerileri.AddRange(sistemVerileri.gucVerileri);
 
-                // Eski verileri temizle (1 haftadan eski)
                 DateTime birHaftaOnce = DateTime.Now.AddDays(-7);
                 arsivVerileri.islemciVerileri.RemoveAll(v => v.zaman < birHaftaOnce);
                 arsivVerileri.ramVerileri.RemoveAll(v => v.zaman < birHaftaOnce);

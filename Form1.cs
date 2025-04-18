@@ -22,11 +22,10 @@ namespace AdamPowerTool
         {
             BilesenleriBaslat();
             ZamanAraligiKutusunuKur();
-            sistemMonitor = new SystemMonitor(this);
+            sistemMonitor = new SystemMonitor(); // Parametresiz yapýcý
             sistemMonitor.GuncellemeleriKur();
             SistemBilgiTablosunuDoldur();
-            // Varsayýlan olarak sistem bilgileri sekmesini göster
-            Dugme1_Tikla(null, EventArgs.Empty);
+            Dugme1_Tikla(null, EventArgs.Empty); // Varsayýlan sistem bilgileri sekmesi
         }
 
         protected override void Dispose(bool disposing)
@@ -282,12 +281,6 @@ namespace AdamPowerTool
         {
             sistemGrafik.GuncellemeyiDurdur();
             sistemMonitor.Kaydet();
-        }
-
-        public void GucBilgileriniGuncelle(double anlikGuc, double ortalamaGuc)
-        {
-            anlikGucEtiketi.Text = $"Anlýk: {anlikGuc:F1} W";
-            ortalamaGucEtiketi.Text = $"Ortalama: {ortalamaGuc:F1} W";
         }
     }
 }
