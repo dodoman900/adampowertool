@@ -26,7 +26,6 @@ namespace AdamPowerTool
                     sistemVerileri.gucVerileri.Add((zaman, random.NextDouble() * 300));
                 }
 
-                // Daha gerçekçi sıcaklık değerleri (CPU: 30-80°C, GPU: 30-75°C)
                 sistemVerileri.islemciSicakligi = 30 + random.NextDouble() * 50; // 30-80°C
                 sistemVerileri.ekranKartiSicakligi = 30 + random.NextDouble() * 45; // 30-75°C
 
@@ -53,9 +52,9 @@ namespace AdamPowerTool
                 sb.AppendLine($"64-Bit İşletim Sistemi: {Environment.Is64BitOperatingSystem}");
 
                 // İşlemci detayları
-                using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor"))
+                using (var cpuSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor"))
                 {
-                    foreach (var obj in searcher.Get())
+                    foreach (var obj in cpuSearcher.Get())
                     {
                         sb.AppendLine($"İşlemci: {obj["Name"]}");
                         sb.AppendLine($"Üretici: {obj["Manufacturer"]}");
@@ -68,11 +67,11 @@ namespace AdamPowerTool
                 }
 
                 // Bellek detayları
-                using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PhysicalMemory"))
+                using (var ramSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_PhysicalMemory"))
                 {
                     long toplamBellek = 0;
                     int modulSayisi = 0;
-                    foreach (var obj in searcher.Get())
+                    foreach (var obj in ramSearcher.Get())
                     {
                         toplamBellek += Convert.ToInt64(obj["Capacity"]);
                         modulSayisi++;
@@ -85,10 +84,10 @@ namespace AdamPowerTool
                 }
 
                 // Disk detayları
-                using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive"))
+                using (var diskSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive"))
                 {
                     int diskSayisi = 0;
-                    foreach (var obj in searcher.Get())
+                    foreach (var obj in diskSearcher.Get())
                     {
                         diskSayisi++;
                         sb.AppendLine($"Disk #{diskSayisi}:");
@@ -99,56 +98,56 @@ namespace AdamPowerTool
                 }
 
                 // Ekran kartı detayları
-                using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
+                using (var gpuSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
                 {
                     int gpuSayisi = 0;
-                    foreach (var obj in searcher.Get())
+                    foreach (var obj in gpuSearcher.Get())
                     {
                         gpuSayisi++;
                         sb.AppendLine($"Ekran Kartı #{gpuSayisi}:");
                         sb.AppendLine($"  Model: {obj["Name"]}");
                         sb.AppendLine($"  Bellek: {Convert.ToInt64(obj["AdapterRAM"]) / (1024 * 1024)} MB");
                         sb.AppendLine($"  Sürücü Sürümü: {obj["DriverVersion"]}");
-                        sb.AppendLine($"  Çözünürlük: {obj["CurrentHorizontalResolution"]}x{tegrated or discrete?");
-                        sb.AppendLine($"  Tür: {(obj["AdapterDACType"].ToString().Contains("Integrated") ? "Tümleşik" : "Ayrık")}");
+                        sb.AppendLine($"  Çözünürlük: {obj["CurrentHorizontalResolution"]}x{obj["CurrentVerticalResolution"]}");
+                        sb.AppendLine($"  Tür: {(obj["AdapterDACType"]?.ToString()?.Contains("Integrated") == true ? "Tümleşik" : "Ayrık")}");
                     }
                 }
 
-                    // Anakart detayları
-                    using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_BaseBoard"))
+                // Anakart detayları
+                using (var mbSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_BaseBoard"))
+                {
+                    foreach (var obj in mbSearcher.Get())
                     {
-                        foreach (var obj in searcher.Get())
-                        {
-                            sb.AppendLine($"Anakart: {obj["Manufacturer"]} {obj["Product"]}");
-                            sb.AppendLine($"Seri Numarası: {obj["SerialNumber"]}");
-                        }
+                        sb.AppendLine($"Anakart: {obj["Manufacturer"]} {obj["Product"]}");
+                        sb.AppendLine($"Seri Numarası: {obj["SerialNumber"]}");
                     }
-
-                    // BIOS detayları
-                    using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_BIOS"))
-                    {
-                        foreach (var obj in searcher.Get())
-                        {
-                            sb.AppendLine($"BIOS: {obj["Manufacturer"]} {obj["SMBIOSBIOSVersion"]}");
-                            sb.AppendLine($"Yayın Tarihi: {obj["ReleaseDate"]}");
-                        }
-                    }
-
-                    // Ağ bağdaştırıcıları
-                    using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_NetworkAdapter WHERE PhysicalAdapter = True"))
-                    {
-                        int agSayisi = 0;
-                        foreach (var obj in searcher.Get())
-                        {
-                            agSayisi++;
-                            sb.AppendLine($"Ağ Bağdaştırıcısı #{agSayisi}:");
-                            sb.AppendLine($"  Ad: {obj["Name"]}");
-                            sb.AppendLine($"  Tür: {obj["AdapterType"]}");
-                        }
-                    }
-
-                    return sb.ToString();
                 }
+
+                // BIOS detayları
+                using (var biosSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_BIOS"))
+                {
+                    foreach (var obj in biosSearcher.Get())
+                    {
+                        sb.AppendLine($"BIOS: {obj["Manufacturer"]} {obj["SMBIOSBIOSVersion"]}");
+                        sb.AppendLine($"Yayın Tarihi: {obj["ReleaseDate"]}");
+                    }
+                }
+
+                // Ağ bağdaştırıcıları
+                using (var netSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_NetworkAdapter WHERE PhysicalAdapter = True"))
+                {
+                    int agSayisi = 0;
+                    foreach (var obj in netSearcher.Get())
+                    {
+                        agSayisi++;
+                        sb.AppendLine($"Ağ Bağdaştırıcısı #{agSayisi}:");
+                        sb.AppendLine($"  Ad: {obj["Name"]}");
+                        sb.AppendLine($"  Tür: {obj["AdapterType"]}");
+                    }
+                }
+
+                return sb.ToString();
+            }
             catch (Exception ex)
             {
                 HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.VeriAlmaHatasi);
