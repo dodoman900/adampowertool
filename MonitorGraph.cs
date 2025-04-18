@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Reflection;
+using System.Windows.Forms;
 
 namespace AdamPowerTool
 {
-    public partial class MonitorGraph : UserControl
+    public class MonitorGraph : Control
     {
-        private Panel graphPanel = new Panel();
+        private readonly List<(DateTime zaman, double deger)> islemciVerileri = new();
+        private readonly List<(DateTime zaman, double deger)> ramVerileri = new();
+        private readonly List<(DateTime zaman, double deger)> diskVerileri = new();
+        private readonly List<(DateTime zaman, double deger)> ekranKartiVerileri = new();
+        private readonly List<(DateTime zaman, double deger)> gucVerileri = new();
+        private readonly Timer guncellemeZamanlayici;
         private TimeSpan seciliZamanAraligi = TimeSpan.FromMinutes(5);
-        private System.Windows.Forms.Timer yenilemeZamanlayicisi = new System.Windows.Forms.Timer();
-        private readonly GraphRenderer islemciGrafik;
-        private readonly GraphRenderer ramGrafik;
-        private readonly GraphRenderer diskGrafik;
-        private readonly GraphRenderer ekranKartiGrafik;
-        private readonly GraphRenderer gucGrafik;
 
         public TimeSpan SeciliZamanAraligi
         {
@@ -23,217 +21,103 @@ namespace AdamPowerTool
             set
             {
                 seciliZamanAraligi = value;
-                islemciGrafik.Clear();
-                ramGrafik.Clear();
-                diskGrafik.Clear();
-                ekranKartiGrafik.Clear();
-                gucGrafik.Clear();
-                graphPanel.Invalidate();
+                Invalidate();
             }
         }
 
         public MonitorGraph()
         {
-            InitializeComponent();
-            this.DoubleBuffered = true;
-
-            float baslangicGrafikGenisligi = 700;
-            float islemciGrafikYuksekligi = 100;
-            float diskEkranKartiYuksekligi = 50;
-            islemciGrafik = new GraphRenderer(baslangicGrafikGenisligi, islemciGrafikYuksekligi, Color.FromArgb(255, 165, 0)); // Turuncu
-            ramGrafik = new GraphRenderer(baslangicGrafikGenisligi, islemciGrafikYuksekligi, Color.FromArgb(0, 255, 0)); // Yeşil
-            diskGrafik = new GraphRenderer(baslangicGrafikGenisligi / 2 - 10, diskEkranKartiYuksekligi, Color.FromArgb(255, 165, 0)); // Turuncu
-            ekranKartiGrafik = new GraphRenderer(baslangicGrafikGenisligi / 2 - 10, diskEkranKartiYuksekligi, Color.FromArgb(0, 255, 0)); // Yeşil
-            gucGrafik = new GraphRenderer(baslangicGrafikGenisligi, islemciGrafikYuksekligi, Color.FromArgb(255, 0, 0)); // Kırmızı neon
-
-            KontrolleriKur();
-            yenilemeZamanlayicisi.Interval = 500;
-            yenilemeZamanlayicisi.Tick += (s, e) => GrafikleriGuncelle();
-        }
-
-        private void KontrolleriKur()
-        {
-            graphPanel.Location = new Point(0, 0);
-            graphPanel.Size = new Size(this.Width, this.Height);
-            graphPanel.BorderStyle = BorderStyle.FixedSingle;
-            graphPanel.BackColor = Color.FromArgb(46, 46, 46);
-            typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic, null, graphPanel, new object[] { true });
-            graphPanel.Paint += GrafikPaneli_Ciz;
-
-            this.Controls.Add(graphPanel);
-        }
-
-        private void GrafikleriGuncelle()
-        {
-            try
-            {
-                var sistemVerileri = BilgisayarBilgileri.GetSystemData(seciliZamanAraligi) as SistemVerileri;
-                if (sistemVerileri == null || sistemVerileri.islemciVerileri == null || sistemVerileri.ramVerileri == null || sistemVerileri.diskVerileri == null || sistemVerileri.ekranKartiVerileri == null || sistemVerileri.gucVerileri == null)
-                {
-                    throw new Exception("Sistem verileri alınamadı.");
-                }
-
-                islemciGrafik.UpdatePoints(sistemVerileri.islemciVerileri, seciliZamanAraligi, 0);
-                ramGrafik.UpdatePoints(sistemVerileri.ramVerileri, seciliZamanAraligi, 0);
-                diskGrafik.UpdatePoints(sistemVerileri.diskVerileri, seciliZamanAraligi, 0);
-                ekranKartiGrafik.UpdatePoints(sistemVerileri.ekranKartiVerileri, seciliZamanAraligi, 0);
-                gucGrafik.UpdatePoints(sistemVerileri.gucVerileri, seciliZamanAraligi, 0);
-
-                graphPanel.Invalidate();
-            }
-            catch (Exception ex)
-            {
-                HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.GrafikCizimHatasi);
-            }
-        }
-
-        private void GrafikPaneli_Ciz(object? sender, PaintEventArgs e)
-        {
-            try
-            {
-                var g = e.Graphics;
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-
-                using (var brush = new LinearGradientBrush(graphPanel.ClientRectangle, Color.FromArgb(27, 27, 27), Color.FromArgb(46, 46, 46), 90F))
-                {
-                    g.FillRectangle(brush, graphPanel.ClientRectangle);
-                }
-
-                float islemciGrafikYuksekligi = (graphPanel.Height - 100) / 4;
-                float ramGrafikYuksekligi = islemciGrafikYuksekligi;
-                float diskEkranKartiYuksekligi = islemciGrafikYuksekligi / 2;
-                float gucGrafikYuksekligi = islemciGrafikYuksekligi;
-
-                GrafikEtiketiCiz(g, "İşlemci Kullanımı (%)", 0);
-                islemciGrafik.Draw(g, 0);
-
-                GrafikEtiketiCiz(g, "RAM Kullanımı (%)", islemciGrafikYuksekligi + 20);
-                ramGrafik.Draw(g, islemciGrafikYuksekligi + 20);
-
-                GrafikEtiketiCiz(g, "Disk Aktivitesi (ölçekli)", (islemciGrafikYuksekligi + 20) * 2);
-                diskGrafik.Draw(g, (islemciGrafikYuksekligi + 20) * 2);
-
-                GrafikEtiketiCiz(g, "Ekran Kartı Kullanımı (%)", (islemciGrafikYuksekligi + 20) * 2 + diskEkranKartiYuksekligi + 10);
-                ekranKartiGrafik.Draw(g, (islemciGrafikYuksekligi + 20) * 2 + diskEkranKartiYuksekligi + 10);
-
-                GrafikEtiketiCiz(g, "Güç Kullanımı (Watt)", (islemciGrafikYuksekligi + 20) * 3 + diskEkranKartiYuksekligi + 10);
-                gucGrafik.Draw(g, (islemciGrafikYuksekligi + 20) * 3 + diskEkranKartiYuksekligi + 10);
-
-                WattDegerleriniCiz(g, (islemciGrafikYuksekligi + 20) * 3 + diskEkranKartiYuksekligi + 10 + gucGrafikYuksekligi + 10);
-            }
-            catch (Exception ex)
-            {
-                HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.GrafikCizimHatasi);
-            }
-        }
-
-        private void GrafikEtiketiCiz(Graphics g, string etiket, float yKonumu)
-        {
-            using (var etiketFontu = new Font("Montserrat", 12, FontStyle.Bold))
-            using (var etiketFirca = new SolidBrush(Color.FromArgb(255, 0, 0)))
-            {
-                g.DrawString(etiket, etiketFontu, etiketFirca, 20, yKonumu - 20);
-            }
-        }
-
-        private void WattDegerleriniCiz(Graphics g, float yKonumu)
-        {
-            var sistemVerileri = BilgisayarBilgileri.GetSystemData(seciliZamanAraligi) as SistemVerileri;
-            if (sistemVerileri == null || sistemVerileri.gucVerileri == null) return;
-
-            double anlikWatt = sistemVerileri.gucVerileri.Count > 0 ? sistemVerileri.gucVerileri[^1].deger : 0.0;
-            double saatlikOrtalama = sistemVerileri.gucVerileri.Count > 0 ? sistemVerileri.gucVerileri.Average(d => d.deger) : 0.0;
-            double tasarrufEdilen = 10.0;
-
-            using (var font = new Font("Montserrat", 10, FontStyle.Bold))
-            using (var brush = new SolidBrush(Color.FromArgb(255, 0, 0)))
-            {
-                g.DrawString($"Anlık: {anlikWatt:F1}W", font, brush, 20, yKonumu);
-                g.DrawString($"Saatlik Ortalama: {saatlikOrtalama:F1}W", font, brush, 20, yKonumu + 20);
-                g.DrawString($"Tasarruf Edilen: {tasarrufEdilen:F1}W", font, brush, 20, yKonumu + 40);
-            }
+            DoubleBuffered = true;
+            guncellemeZamanlayici = new Timer { Interval = 2000 };
+            guncellemeZamanlayici.Tick += (s, e) => Guncelle();
+            Size = new Size(740, 440);
         }
 
         public void GuncellemeyiBaslat()
         {
-            yenilemeZamanlayicisi.Start();
+            guncellemeZamanlayici.Start();
         }
 
         public void GuncellemeyiDurdur()
         {
-            yenilemeZamanlayicisi.Stop();
+            guncellemeZamanlayici.Stop();
         }
 
-        private void InitializeComponent()
+        private void Guncelle()
         {
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Size = new System.Drawing.Size(740, 500);
-        }
-    }
-
-    internal class GraphRenderer
-    {
-        private readonly float genislik;
-        private readonly float yukseklik;
-        private readonly Color grafikRengi;
-        private readonly List<PointF> noktalar;
-
-        public GraphRenderer(float genislik, float yukseklik, Color grafikRengi)
-        {
-            this.genislik = genislik;
-            this.yukseklik = yukseklik;
-            this.grafikRengi = grafikRengi;
-            this.noktalar = new List<PointF>();
-        }
-
-        public void UpdatePoints(List<(DateTime zaman, double deger)> veriler, TimeSpan zamanAraligi, float yKonumu)
-        {
-            noktalar.Clear();
-            if (veriler == null || veriler.Count == 0) return;
-
-            DateTime bitisZamani = veriler[^1].zaman;
-            DateTime baslangicZamani = bitisZamani - zamanAraligi;
-
-            float xAdimi = genislik / Math.Max(1, veriler.Count - 1);
-            for (int i = 0; i < veriler.Count; i++)
+            try
             {
-                if (veriler[i].zaman >= baslangicZamani)
+                var sistemVerileri = BilgisayarBilgileri.GetSystemData(seciliZamanAraligi) as SistemVerileri;
+                if (sistemVerileri == null)
                 {
-                    float x = (i * xAdimi);
-                    float y = (float)(yukseklik - (veriler[i].deger / 100.0 * yukseklik)) + yKonumu;
+                    throw new Exception("Sistem verileri alınamadı.");
+                }
+
+                islemciVerileri.Clear();
+                ramVerileri.Clear();
+                diskVerileri.Clear();
+                ekranKartiVerileri.Clear();
+                gucVerileri.Clear();
+
+                islemciVerileri.AddRange(sistemVerileri.islemciVerileri);
+                ramVerileri.AddRange(sistemVerileri.ramVerileri);
+                diskVerileri.AddRange(sistemVerileri.diskVerileri);
+                ekranKartiVerileri.AddRange(sistemVerileri.ekranKartiVerileri);
+                gucVerileri.AddRange(sistemVerileri.gucVerileri);
+
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                HataYoneticisi.HataEleAl(ex, HataYoneticisi.HataMesajlari.VeriAlmaHatasi);
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            var g = e.Graphics;
+            g.Clear(Color.FromArgb(27, 27, 27));
+
+            if (islemciVerileri.Count == 0) return;
+
+            float genislik = Width;
+            float yukseklik = Height / 5f;
+            DateTime bitisZamani = islemciVerileri[^1].zaman;
+            DateTime baslangicZamani = bitisZamani - seciliZamanAraligi;
+
+            void GrafikCiz(List<(DateTime zaman, double deger)> veriler, Color renk, float yOffset)
+            {
+                var noktalar = new List<PointF>();
+                for (int i = 0; i < veriler.Count; i++)
+                {
+                    var (zaman, deger) = veriler[i];
+                    if (zaman < baslangicZamani) continue;
+                    float x = (float)(zaman - baslangicZamani).TotalSeconds / (float)seciliZamanAraligi.TotalSeconds * genislik;
+                    float y = yOffset + (float)(1 - deger / 100) * yukseklik;
                     noktalar.Add(new PointF(x, y));
                 }
-            }
-        }
 
-        public void Draw(Graphics g, float yKonumu)
-        {
-            if (noktalar.Count < 2) return;
-
-            using (var kalem = new Pen(grafikRengi, 2))
-            {
-                g.DrawLines(kalem, noktalar.ToArray());
-
-                for (int i = 0; i <= 100; i += 20)
+                if (noktalar.Count > 1)
                 {
-                    float y = yukseklik - (i / 100.0f * yukseklik) + yKonumu;
-                    using (var izgaraKalemi = new Pen(Color.FromArgb(50, 255, 255, 255), 1))
-                    {
-                        g.DrawLine(izgaraKalemi, 0, y, genislik, y);
-                    }
-                    using (var etiketFontu = new Font("Montserrat", 8, FontStyle.Bold))
-                    using (var etiketFirca = new SolidBrush(Color.FromArgb(150, 255, 255, 255)))
-                    {
-                        g.DrawString(i.ToString(), etiketFontu, etiketFirca, genislik + 5, y - 5);
-                    }
+                    g.DrawLines(new Pen(renk, 2), noktalar.ToArray());
                 }
             }
-        }
 
-        public void Clear()
-        {
-            noktalar.Clear();
+            GrafikCiz(islemciVerileri, Color.Green, 0);
+            GrafikCiz(ramVerileri, Color.Red, yukseklik);
+            GrafikCiz(diskVerileri, Color.Yellow, yukseklik * 2);
+            GrafikCiz(ekranKartiVerileri, Color.Orange, yukseklik * 3);
+            GrafikCiz(gucVerileri, Color.Cyan, yukseklik * 4);
+
+            using (var font = new Font("Montserrat", 8))
+            {
+                g.DrawString("İşlemci Kullanımı (%)", font, Brushes.Green, 0, 0);
+                g.DrawString("RAM Kullanımı (%)", font, Brushes.Red, 0, yukseklik);
+                g.DrawString("Disk Aktivitesi (ölçekli)", font, Brushes.Yellow, 0, yukseklik * 2);
+                g.DrawString("Ekran Kartı Kullanımı (%)", font, Brushes.Orange, 0, yukseklik * 3);
+                g.DrawString("Güç Kullanımı (Watt)", font, Brushes.Cyan, 0, yukseklik * 4);
+            }
         }
     }
 }
