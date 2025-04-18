@@ -81,9 +81,7 @@ namespace AdamPowerTool
             this.sekmeKontrolu.TabIndex = 0;
             this.sekmeKontrolu.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
             this.sekmeKontrolu.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            this.sekmeKontrolu.Appearance = TabAppearance.FlatButtons;
-            this.sekmeKontrolu.ItemSize = new System.Drawing.Size(0, 1);
-            this.sekmeKontrolu.SizeMode = TabSizeMode.Fixed;
+            this.sekmeKontrolu.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
 
             // sekmeSayfasi1
             this.sekmeSayfasi1.Controls.Add(this.sistemBilgiEtiketi);
@@ -102,17 +100,17 @@ namespace AdamPowerTool
             this.sistemBilgiEtiketi.Size = new System.Drawing.Size(740, 580);
             this.sistemBilgiEtiketi.TabIndex = 0;
             this.sistemBilgiEtiketi.ForeColor = System.Drawing.Color.White;
-            this.sistemBilgiEtiketi.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            this.sistemBilgiEtiketi.Font = new System.Drawing.Font("Montserrat", 12F, System.Drawing.FontStyle.Regular);
             this.sistemBilgiEtiketi.AutoSize = false;
             this.sistemBilgiEtiketi.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
 
             // sekmeSayfasi2
-            this.sekmeSayfasi2.Controls.Add(this.izlemeGrafik);
             this.sekmeSayfasi2.Controls.Add(this.kullanimTablosu);
             this.sekmeSayfasi2.Controls.Add(this.islemciSicaklikEtiketi);
             this.sekmeSayfasi2.Controls.Add(this.ekranKartiSicaklikEtiketi);
             this.sekmeSayfasi2.Controls.Add(this.islemciEtiketi);
             this.sekmeSayfasi2.Controls.Add(this.ekranKartiEtiketi);
+            this.sekmeSayfasi2.Controls.Add(this.izlemeGrafik);
             this.sekmeSayfasi2.Location = new System.Drawing.Point(4, 4);
             this.sekmeSayfasi2.Name = "sekmeSayfasi2";
             this.sekmeSayfasi2.Padding = new System.Windows.Forms.Padding(3);
@@ -122,9 +120,9 @@ namespace AdamPowerTool
             this.sekmeSayfasi2.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
 
             // izlemeGrafik
-            this.izlemeGrafik.Location = new System.Drawing.Point(6, 90);
+            this.izlemeGrafik.Location = new System.Drawing.Point(6, 150);
             this.izlemeGrafik.Name = "izlemeGrafik";
-            this.izlemeGrafik.Size = new System.Drawing.Size(740, 500);
+            this.izlemeGrafik.Size = new System.Drawing.Size(740, 440);
             this.izlemeGrafik.TabIndex = 0;
 
             // kullanimTablosu
@@ -132,7 +130,7 @@ namespace AdamPowerTool
             this.kullanimTablosu.Location = new System.Drawing.Point(6, 6);
             this.kullanimTablosu.Name = "kullanimTablosu";
             this.kullanimTablosu.RowHeadersVisible = false;
-            this.kullanimTablosu.Size = new System.Drawing.Size(300, 80);
+            this.kullanimTablosu.Size = new System.Drawing.Size(300, 100);
             this.kullanimTablosu.TabIndex = 1;
             this.kullanimTablosu.BackgroundColor = System.Drawing.Color.FromArgb(27, 27, 27);
             this.kullanimTablosu.ForeColor = System.Drawing.Color.White;
@@ -141,7 +139,7 @@ namespace AdamPowerTool
             this.kullanimTablosu.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
             this.kullanimTablosu.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
             this.kullanimTablosu.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
-            this.kullanimTablosu.DefaultCellStyle.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            this.kullanimTablosu.DefaultCellStyle.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Regular);
 
             // islemciSicaklikEtiketi
             this.islemciSicaklikEtiketi.Location = new System.Drawing.Point(316, 6);
@@ -400,6 +398,7 @@ namespace AdamPowerTool
                 kullanimTablosu.Rows.Add("RAM Kullanýmý (%)", sistemVerileri.ramVerileri.Count > 0 ? $"{sistemVerileri.ramVerileri[^1].deger:F1}" : "0.0");
                 kullanimTablosu.Rows.Add("Disk Aktivitesi (ölçekli)", sistemVerileri.diskVerileri.Count > 0 ? $"{sistemVerileri.diskVerileri[^1].deger:F1}" : "0.0");
                 kullanimTablosu.Rows.Add("Ekran Kartý Kullanýmý (%)", sistemVerileri.ekranKartiVerileri.Count > 0 ? $"{sistemVerileri.ekranKartiVerileri[^1].deger:F1}" : "0.0");
+                kullanimTablosu.Rows.Add("Güç Kullanýmý (Watt)", sistemVerileri.gucVerileri.Count > 0 ? $"{sistemVerileri.gucVerileri[^1].deger:F1}" : "0.0");
             }
             catch (Exception ex)
             {
@@ -409,6 +408,7 @@ namespace AdamPowerTool
                 kullanimTablosu.Rows.Add("RAM Kullanýmý (%)", "N/A");
                 kullanimTablosu.Rows.Add("Disk Aktivitesi (ölçekli)", "N/A");
                 kullanimTablosu.Rows.Add("Ekran Kartý Kullanýmý (%)", "N/A");
+                kullanimTablosu.Rows.Add("Güç Kullanýmý (Watt)", "N/A");
             }
         }
 
@@ -465,7 +465,7 @@ namespace AdamPowerTool
             }
         }
 
-        private void FormuKapatirken(object sender, FormClosingEventArgs e)
+        private void FormuKapatirken(object? sender, FormClosingEventArgs e)
         {
             izlemeGrafik?.GuncellemeyiDurdur();
         }

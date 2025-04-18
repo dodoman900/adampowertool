@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
+using System.Management;
 
 namespace AdamPowerTool
 {
@@ -47,6 +48,59 @@ namespace AdamPowerTool
                 sb.AppendLine($"Bilgisayar Adı: {Environment.MachineName}");
                 sb.AppendLine($"Kullanıcı Adı: {Environment.UserName}");
                 sb.AppendLine($"İşlemci Sayısı: {Environment.ProcessorCount}");
+
+                // İşlemci detayları
+                using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor"))
+                {
+                    foreach (var obj in searcher.Get())
+                    {
+                        sb.AppendLine($"İşlemci: {obj["Name"]}");
+                        sb.AppendLine($"Çekirdek Sayısı: {obj["NumberOfCores"]}");
+                        sb.AppendLine($"Mantıksal İşlemci Sayısı: {obj["NumberOfLogicalProcessors"]}");
+                        sb.AppendLine($"Maksimum Saat Hızı: {obj["MaxClockSpeed"]} MHz");
+                    }
+                }
+
+                // Bellek detayları
+                using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PhysicalMemory"))
+                {
+                    long toplamBellek = 0;
+                    foreach (var obj in searcher.Get())
+                    {
+                        toplamBellek += Convert.ToInt64(obj["Capacity"]);
+                    }
+                    sb.AppendLine($"Toplam RAM: {toplamBellek / (1024 * 1024 * 1024)} GB");
+                }
+
+                // Disk detayları
+                using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive"))
+                {
+                    foreach (var obj in searcher.Get())
+                    {
+                        sb.AppendLine($"Disk: {obj["Model"]}");
+                        sb.AppendLine($"Kapasite: {Convert.ToInt64(obj["Size"]) / (1024 * 1024 * 1024)} GB");
+                    }
+                }
+
+                // Ekran kartı detayları
+                using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
+                {
+                    foreach (var obj in searcher.Get())
+                    {
+                        sb.AppendLine($"Ekran Kartı: {obj["Name"]}");
+                        sb.AppendLine($"Bellek: {Convert.ToInt64(obj["AdapterRAM"]) / (1024 * 1024)} MB");
+                    }
+                }
+
+                // Anakart detayları
+                using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_BaseBoard"))
+                {
+                    foreach (var obj in searcher.Get())
+                    {
+                        sb.AppendLine($"Anakart: {obj["Manufacturer"]} {obj["Product"]}");
+                    }
+                }
+
                 return sb.ToString();
             }
             catch (Exception ex)

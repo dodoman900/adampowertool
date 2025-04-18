@@ -177,13 +177,14 @@ namespace AdamPowerTool
         private readonly float genislik;
         private readonly float yukseklik;
         private readonly Color grafikRengi;
-        private readonly List<PointF> noktalar = new List<PointF>();
+        private readonly List<PointF> noktalar;
 
         public GraphRenderer(float genislik, float yukseklik, Color grafikRengi)
         {
             this.genislik = genislik;
             this.yukseklik = yukseklik;
             this.grafikRengi = grafikRengi;
+            this.noktalar = new List<PointF>();
         }
 
         public void UpdatePoints(List<(DateTime zaman, double deger)> veriler, TimeSpan zamanAraligi, float yKonumu)

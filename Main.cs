@@ -6,7 +6,7 @@ namespace AdamPowerTool
     static class Program
     {
         [STAThread]
-        static void Baslat()
+        static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
