@@ -8,13 +8,13 @@ namespace AdamPowerTool
     public class SystemMonitor
     {
         private readonly Form1 form;
-        private readonly System.Windows.Forms.Timer guncellemeZamanlayici;
+        private readonly System.Windows.Forms.Timer guncellemeZamanlayici = new();
         private SistemVerileri arsivVerileri;
 
         public SystemMonitor(Form1 form)
         {
             this.form = form;
-            guncellemeZamanlayici = new System.Windows.Forms.Timer { Interval = 2000 };
+            guncellemeZamanlayici.Interval = 2000;
             arsivVerileri = YukleArsiv() ?? new SistemVerileri();
         }
 

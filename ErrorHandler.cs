@@ -5,15 +5,24 @@ namespace AdamPowerTool
 {
     public static class HataYoneticisi
     {
-        public static class HataMesajlari
+        public enum HataMesajlari
         {
-            public const string VeriAlmaHatasi = "Veri alınırken bir hata oluştu.";
-            public const string GrafikCizimHatasi = "Grafik çizimi sırasında bir hata oluştu.";
+            VeriAlmaHatasi,
+            VeriKaydetmeHatasi,
+            VeriYuklemeHatasi
         }
 
-        public static void HataEleAl(Exception? hata, string mesaj)
+        public static void HataEleAl(Exception ex, HataMesajlari mesaj)
         {
-            MessageBox.Show($"{mesaj}\nHata: {hata?.Message ?? "Bilinmeyen hata"}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string hataMesaji = mesaj switch
+            {
+                HataMesajlari.VeriAlmaHatasi => $"Veri alma hatası: {ex.Message}",
+                HataMesajlari.VeriKaydetmeHatasi => $"Veri kaydetme hatası: {ex.Message}",
+                HataMesajlari.VeriYuklemeHatasi => $"Veri yükleme hatası: {ex.Message}",
+                _ => $"Bilinmeyen hata: {ex.Message}"
+            };
+
+            MessageBox.Show(hataMesaji, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

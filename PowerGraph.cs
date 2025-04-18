@@ -8,7 +8,7 @@ namespace AdamPowerTool
     public class PowerGraph : Control
     {
         private readonly List<(DateTime zaman, double deger)> gucVerileri = new();
-        private readonly System.Windows.Forms.Timer guncellemeZamanlayici;
+        private readonly System.Windows.Forms.Timer guncellemeZamanlayici = new();
         private TimeSpan seciliZamanAraligi = TimeSpan.FromMinutes(5);
 
         public TimeSpan SeciliZamanAraligi
@@ -24,7 +24,7 @@ namespace AdamPowerTool
         public PowerGraph()
         {
             DoubleBuffered = true;
-            guncellemeZamanlayici = new System.Windows.Forms.Timer { Interval = 2000 };
+            guncellemeZamanlayici.Interval = 2000;
             guncellemeZamanlayici.Tick += (s, e) => Guncelle();
             Size = new Size(270, 400);
         }
@@ -43,7 +43,7 @@ namespace AdamPowerTool
         {
             try
             {
-                var sistemVerileri = new SystemMonitor(null).GetArsivVerileri();
+                var sistemVerileri = new SystemMonitor(null!).GetArsivVerileri();
                 if (sistemVerileri == null)
                 {
                     throw new Exception("Arşiv verileri alınamadı.");
@@ -80,7 +80,7 @@ namespace AdamPowerTool
             var noktalar = new List<PointF>();
             for (int i = 0; i < gucVerileri.Count; i++)
             {
-                var (zaman, deger) = gucVerileri[i];
+                (DateTime zaman, double deger) = gucVerileri[i];
                 if (zaman < baslangicZamani) continue;
                 float x = solBosluk + (float)(zaman - baslangicZamani).TotalSeconds / (float)seciliZamanAraligi.TotalSeconds * genislik;
                 float y = 10 + (float)(1 - deger / 300) * yukseklik;
@@ -92,10 +92,8 @@ namespace AdamPowerTool
                 g.DrawLines(new Pen(Color.Cyan, 2), noktalar.ToArray());
             }
 
-            using (var font = new Font("Montserrat", 8))
-            {
-                g.DrawString("Güç Kullanımı (Watt)", font, Brushes.White, solBosluk, 0);
-            }
+            using var font = new Font("Montserrat", 8);
+            g.DrawString("Güç Kullanımı (Watt)", font, Brushes.White, solBosluk, 0);
         }
     }
 }
