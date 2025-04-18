@@ -13,8 +13,7 @@ namespace AdamPowerTool
         private readonly System.Windows.Forms.Button dugme4 = new();
         private readonly System.Windows.Forms.ComboBox zamanAraligiKutusu = new();
         private readonly System.Windows.Forms.DataGridView sistemBilgiTablosu = new();
-        private readonly MonitorGraph izlemeGrafik = new();
-        private readonly PowerGraph gucGrafik = new();
+        private readonly SystemGraph sistemGrafik = new();
         private readonly System.Windows.Forms.Label anlikGucEtiketi = new();
         private readonly System.Windows.Forms.Label ortalamaGucEtiketi = new();
         private readonly SystemMonitor sistemMonitor;
@@ -25,8 +24,7 @@ namespace AdamPowerTool
             ZamanAraligiKutusunuKur();
             sistemMonitor = new SystemMonitor(this);
             sistemMonitor.GuncellemeleriKur();
-            izlemeGrafik.GuncellemeyiBaslat();
-            gucGrafik.GuncellemeyiBaslat();
+            sistemGrafik.GuncellemeyiBaslat();
             SistemBilgiTablosunuDoldur();
         }
 
@@ -45,141 +43,134 @@ namespace AdamPowerTool
             SuspendLayout();
 
             // dugme1
-            dugme1.Location = new System.Drawing.Point(10, 10);
+            dugme1.Location = new Point(10, 10);
             dugme1.Name = "dugme1";
-            dugme1.Size = new System.Drawing.Size(80, 30);
+            dugme1.Size = new Size(80, 30);
             dugme1.TabIndex = 1;
             dugme1.Text = "Sistem";
             dugme1.UseVisualStyleBackColor = false;
-            dugme1.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
-            dugme1.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            dugme1.BackColor = Color.FromArgb(46, 46, 46);
+            dugme1.ForeColor = Color.FromArgb(255, 0, 0);
             dugme1.FlatStyle = FlatStyle.Flat;
-            dugme1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            dugme1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(60, 60, 60);
-            dugme1.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
+            dugme1.FlatAppearance.BorderColor = Color.FromArgb(255, 0, 0);
+            dugme1.FlatAppearance.MouseOverBackColor = Color.FromArgb(60, 60, 60);
+            dugme1.Font = new Font("Montserrat", 8F, FontStyle.Bold);
             dugme1.Click += Dugme1_Tikla;
             dugme1.MouseEnter += Dugme_UzerineGel;
             dugme1.MouseLeave += Dugme_Ayril;
 
             // dugme2
-            dugme2.Location = new System.Drawing.Point(100, 10);
+            dugme2.Location = new Point(100, 10);
             dugme2.Name = "dugme2";
-            dugme2.Size = new System.Drawing.Size(80, 30);
+            dugme2.Size = new Size(80, 30);
             dugme2.TabIndex = 2;
             dugme2.Text = "Veri Ýzleme";
             dugme2.UseVisualStyleBackColor = false;
-            dugme2.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
-            dugme2.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            dugme2.BackColor = Color.FromArgb(46, 46, 46);
+            dugme2.ForeColor = Color.FromArgb(255, 0, 0);
             dugme2.FlatStyle = FlatStyle.Flat;
-            dugme2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            dugme2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(60, 60, 60);
-            dugme2.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
+            dugme2.FlatAppearance.BorderColor = Color.FromArgb(255, 0, 0);
+            dugme2.FlatAppearance.MouseOverBackColor = Color.FromArgb(60, 60, 60);
+            dugme2.Font = new Font("Montserrat", 8F, FontStyle.Bold);
             dugme2.Click += Dugme2_Tikla;
             dugme2.MouseEnter += Dugme_UzerineGel;
             dugme2.MouseLeave += Dugme_Ayril;
 
             // dugme3
-            dugme3.Location = new System.Drawing.Point(190, 10);
+            dugme3.Location = new Point(190, 10);
             dugme3.Name = "dugme3";
-            dugme3.Size = new System.Drawing.Size(80, 30);
+            dugme3.Size = new Size(80, 30);
             dugme3.TabIndex = 3;
             dugme3.Text = "Optimizasyon";
             dugme3.UseVisualStyleBackColor = false;
-            dugme3.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
-            dugme3.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            dugme3.BackColor = Color.FromArgb(46, 46, 46);
+            dugme3.ForeColor = Color.FromArgb(255, 0, 0);
             dugme3.FlatStyle = FlatStyle.Flat;
-            dugme3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            dugme3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(60, 60, 60);
-            dugme3.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
+            dugme3.FlatAppearance.BorderColor = Color.FromArgb(255, 0, 0);
+            dugme3.FlatAppearance.MouseOverBackColor = Color.FromArgb(60, 60, 60);
+            dugme3.Font = new Font("Montserrat", 8F, FontStyle.Bold);
             dugme3.Click += Dugme3_Tikla;
             dugme3.MouseEnter += Dugme_UzerineGel;
             dugme3.MouseLeave += Dugme_Ayril;
 
             // dugme4
-            dugme4.Location = new System.Drawing.Point(280, 10);
+            dugme4.Location = new Point(280, 10);
             dugme4.Name = "dugme4";
-            dugme4.Size = new System.Drawing.Size(80, 30);
+            dugme4.Size = new Size(80, 30);
             dugme4.TabIndex = 4;
             dugme4.Text = "Oyun";
             dugme4.UseVisualStyleBackColor = false;
-            dugme4.BackColor = System.Drawing.Color.FromArgb(46, 46, 46);
-            dugme4.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+            dugme4.BackColor = Color.FromArgb(46, 46, 46);
+            dugme4.ForeColor = Color.FromArgb(255, 0, 0);
             dugme4.FlatStyle = FlatStyle.Flat;
-            dugme4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            dugme4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(60, 60, 60);
-            dugme4.Font = new System.Drawing.Font("Montserrat", 8F, System.Drawing.FontStyle.Bold);
+            dugme4.FlatAppearance.BorderColor = Color.FromArgb(255, 0, 0);
+            dugme4.FlatAppearance.MouseOverBackColor = Color.FromArgb(60, 60, 60);
+            dugme4.Font = new Font("Montserrat", 8F, FontStyle.Bold);
             dugme4.Click += Dugme4_Tikla;
             dugme4.MouseEnter += Dugme_UzerineGel;
             dugme4.MouseLeave += Dugme_Ayril;
 
             // zamanAraligiKutusu
-            zamanAraligiKutusu.Location = new System.Drawing.Point(370, 10);
-            zamanAraligiKutusu.Size = new System.Drawing.Size(120, 30);
-            zamanAraligiKutusu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            zamanAraligiKutusu.BackColor = System.Drawing.Color.FromArgb(60, 60, 60);
-            zamanAraligiKutusu.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
-            zamanAraligiKutusu.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            zamanAraligiKutusu.Location = new Point(370, 10);
+            zamanAraligiKutusu.Size = new Size(120, 30);
+            zamanAraligiKutusu.DropDownStyle = ComboBoxStyle.DropDownList;
+            zamanAraligiKutusu.BackColor = Color.FromArgb(60, 60, 60);
+            zamanAraligiKutusu.ForeColor = Color.FromArgb(255, 0, 0);
+            zamanAraligiKutusu.Font = new Font("Montserrat", 10F, FontStyle.Bold);
             zamanAraligiKutusu.Name = "zamanAraligiKutusu";
             zamanAraligiKutusu.TabIndex = 5;
 
             // sistemBilgiTablosu
-            sistemBilgiTablosu.Location = new System.Drawing.Point(10, 50);
+            sistemBilgiTablosu.Location = new Point(10, 50);
             sistemBilgiTablosu.Name = "sistemBilgiTablosu";
-            sistemBilgiTablosu.Size = new System.Drawing.Size(760, 600);
+            sistemBilgiTablosu.Size = new Size(760, 600);
             sistemBilgiTablosu.TabIndex = 6;
-            sistemBilgiTablosu.BackgroundColor = System.Drawing.Color.FromArgb(27, 27, 27);
-            sistemBilgiTablosu.ForeColor = System.Drawing.Color.White;
+            sistemBilgiTablosu.BackgroundColor = Color.FromArgb(27, 27, 27);
+            sistemBilgiTablosu.ForeColor = Color.White;
             sistemBilgiTablosu.ColumnHeadersVisible = false;
             sistemBilgiTablosu.RowHeadersVisible = false;
             sistemBilgiTablosu.ReadOnly = true;
             sistemBilgiTablosu.AllowUserToAddRows = false;
             sistemBilgiTablosu.AllowUserToDeleteRows = false;
             sistemBilgiTablosu.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            sistemBilgiTablosu.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
-            sistemBilgiTablosu.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
-            sistemBilgiTablosu.DefaultCellStyle.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Regular);
+            sistemBilgiTablosu.DefaultCellStyle.BackColor = Color.FromArgb(27, 27, 27);
+            sistemBilgiTablosu.DefaultCellStyle.ForeColor = Color.White;
+            sistemBilgiTablosu.DefaultCellStyle.Font = new Font("Montserrat", 10F, FontStyle.Regular);
             sistemBilgiTablosu.ScrollBars = ScrollBars.Vertical;
 
-            // izlemeGrafik
-            izlemeGrafik.Location = new System.Drawing.Point(10, 50);
-            izlemeGrafik.Name = "izlemeGrafik";
-            izlemeGrafik.Size = new System.Drawing.Size(480, 400);
-            izlemeGrafik.TabIndex = 7;
-
-            // gucGrafik
-            gucGrafik.Location = new System.Drawing.Point(500, 50);
-            gucGrafik.Name = "gucGrafik";
-            gucGrafik.Size = new System.Drawing.Size(270, 400);
-            gucGrafik.TabIndex = 8;
+            // sistemGrafik
+            sistemGrafik.Location = new Point(10, 50);
+            sistemGrafik.Name = "sistemGrafik";
+            sistemGrafik.Size = new Size(760, 500);
+            sistemGrafik.TabIndex = 7;
 
             // anlikGucEtiketi
-            anlikGucEtiketi.Location = new System.Drawing.Point(500, 460);
-            anlikGucEtiketi.Size = new System.Drawing.Size(270, 20);
+            anlikGucEtiketi.Location = new Point(500, 560);
+            anlikGucEtiketi.Size = new Size(270, 20);
             anlikGucEtiketi.Text = "Anlýk: 0.0 W";
-            anlikGucEtiketi.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            anlikGucEtiketi.ForeColor = System.Drawing.Color.Cyan;
-            anlikGucEtiketi.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            anlikGucEtiketi.TextAlign = ContentAlignment.MiddleLeft;
+            anlikGucEtiketi.ForeColor = Color.Cyan;
+            anlikGucEtiketi.Font = new Font("Montserrat", 10F, FontStyle.Bold);
             anlikGucEtiketi.Name = "anlikGucEtiketi";
-            anlikGucEtiketi.TabIndex = 9;
+            anlikGucEtiketi.TabIndex = 8;
 
             // ortalamaGucEtiketi
-            ortalamaGucEtiketi.Location = new System.Drawing.Point(500, 490);
-            ortalamaGucEtiketi.Size = new System.Drawing.Size(270, 20);
+            ortalamaGucEtiketi.Location = new Point(500, 590);
+            ortalamaGucEtiketi.Size = new Size(270, 20);
             ortalamaGucEtiketi.Text = "Ortalama: 0.0 W";
-            ortalamaGucEtiketi.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            ortalamaGucEtiketi.ForeColor = System.Drawing.Color.Cyan;
-            ortalamaGucEtiketi.Font = new System.Drawing.Font("Montserrat", 10F, System.Drawing.FontStyle.Bold);
+            ortalamaGucEtiketi.TextAlign = ContentAlignment.MiddleLeft;
+            ortalamaGucEtiketi.ForeColor = Color.Cyan;
+            ortalamaGucEtiketi.Font = new Font("Montserrat", 10F, FontStyle.Bold);
             ortalamaGucEtiketi.Name = "ortalamaGucEtiketi";
-            ortalamaGucEtiketi.TabIndex = 10;
+            ortalamaGucEtiketi.TabIndex = 9;
 
             // Form1
-            AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(780, 660);
+            AutoScaleDimensions = new SizeF(6F, 13F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(780, 660);
             Controls.Add(anlikGucEtiketi);
             Controls.Add(ortalamaGucEtiketi);
-            Controls.Add(gucGrafik);
-            Controls.Add(izlemeGrafik);
+            Controls.Add(sistemGrafik);
             Controls.Add(sistemBilgiTablosu);
             Controls.Add(zamanAraligiKutusu);
             Controls.Add(dugme4);
@@ -188,7 +179,7 @@ namespace AdamPowerTool
             Controls.Add(dugme1);
             Name = "Form1";
             Text = "Adam'ýn GÜÇ YÖNETÝM ARACI";
-            BackColor = System.Drawing.Color.FromArgb(27, 27, 27);
+            BackColor = Color.FromArgb(27, 27, 27);
             FormClosing += FormuKapatirken;
             ((System.ComponentModel.ISupportInitialize)sistemBilgiTablosu).EndInit();
             ResumeLayout(false);
@@ -210,8 +201,7 @@ namespace AdamPowerTool
                     5 => TimeSpan.FromDays(7),
                     _ => TimeSpan.FromMinutes(5)
                 };
-                izlemeGrafik.SeciliZamanAraligi = yeniAralik;
-                gucGrafik.SeciliZamanAraligi = yeniAralik;
+                sistemGrafik.SeciliZamanAraligi = yeniAralik;
             };
         }
 
@@ -236,8 +226,7 @@ namespace AdamPowerTool
         private void Dugme1_Tikla(object? sender, EventArgs e)
         {
             sistemBilgiTablosu.Visible = true;
-            izlemeGrafik.Visible = false;
-            gucGrafik.Visible = false;
+            sistemGrafik.Visible = false;
             anlikGucEtiketi.Visible = false;
             ortalamaGucEtiketi.Visible = false;
         }
@@ -245,8 +234,7 @@ namespace AdamPowerTool
         private void Dugme2_Tikla(object? sender, EventArgs e)
         {
             sistemBilgiTablosu.Visible = false;
-            izlemeGrafik.Visible = true;
-            gucGrafik.Visible = true;
+            sistemGrafik.Visible = true;
             anlikGucEtiketi.Visible = true;
             ortalamaGucEtiketi.Visible = true;
         }
@@ -254,8 +242,7 @@ namespace AdamPowerTool
         private void Dugme3_Tikla(object? sender, EventArgs e)
         {
             sistemBilgiTablosu.Visible = false;
-            izlemeGrafik.Visible = false;
-            gucGrafik.Visible = false;
+            sistemGrafik.Visible = false;
             anlikGucEtiketi.Visible = false;
             ortalamaGucEtiketi.Visible = false;
         }
@@ -263,8 +250,7 @@ namespace AdamPowerTool
         private void Dugme4_Tikla(object? sender, EventArgs e)
         {
             sistemBilgiTablosu.Visible = false;
-            izlemeGrafik.Visible = false;
-            gucGrafik.Visible = false;
+            sistemGrafik.Visible = false;
             anlikGucEtiketi.Visible = false;
             ortalamaGucEtiketi.Visible = false;
         }
@@ -289,8 +275,7 @@ namespace AdamPowerTool
 
         private void FormuKapatirken(object? sender, FormClosingEventArgs e)
         {
-            izlemeGrafik.GuncellemeyiDurdur();
-            gucGrafik.GuncellemeyiDurdur();
+            sistemGrafik.GuncellemeyiDurdur();
             sistemMonitor.Kaydet();
         }
 
