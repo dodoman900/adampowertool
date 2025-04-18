@@ -62,6 +62,8 @@ namespace AdamPowerTool
             dugmeSistem.FlatAppearance.BorderColor = Color.FromArgb(255, 0, 0);
             dugmeSistem.Font = new Font("Montserrat", 8F, FontStyle.Bold);
             dugmeSistem.Click += DugmeSistem_Tikla;
+            dugmeSistem.MouseEnter += Button_MouseEnter;
+            dugmeSistem.MouseLeave += Button_MouseLeave;
             aciklamaAraci.SetToolTip(dugmeSistem, "Bilgisayarýnýzýn donaným bilgilerini gösterir.");
 
             dugmeVeriIzleme.Location = new Point(100, 10);
@@ -73,6 +75,8 @@ namespace AdamPowerTool
             dugmeVeriIzleme.FlatAppearance.BorderColor = Color.FromArgb(255, 0, 0);
             dugmeVeriIzleme.Font = new Font("Montserrat", 8F, FontStyle.Bold);
             dugmeVeriIzleme.Click += DugmeVeriIzleme_Tikla;
+            dugmeVeriIzleme.MouseEnter += Button_MouseEnter;
+            dugmeVeriIzleme.MouseLeave += Button_MouseLeave;
             aciklamaAraci.SetToolTip(dugmeVeriIzleme, "CPU, RAM, Disk, GPU ve güç kullanýmýný grafiklerle gösterir.");
 
             dugmeOptimizasyon.Location = new Point(190, 10);
@@ -84,6 +88,8 @@ namespace AdamPowerTool
             dugmeOptimizasyon.FlatAppearance.BorderColor = Color.FromArgb(255, 0, 0);
             dugmeOptimizasyon.Font = new Font("Montserrat", 8F, FontStyle.Bold);
             dugmeOptimizasyon.Click += DugmeOptimizasyon_Tikla;
+            dugmeOptimizasyon.MouseEnter += Button_MouseEnter;
+            dugmeOptimizasyon.MouseLeave += Button_MouseLeave;
             aciklamaAraci.SetToolTip(dugmeOptimizasyon, "Sistem performansýný optimize eder ve güç tasarrufu saðlar.");
 
             dugmeAyarlar.Location = new Point(280, 10);
@@ -95,6 +101,8 @@ namespace AdamPowerTool
             dugmeAyarlar.FlatAppearance.BorderColor = Color.FromArgb(255, 0, 0);
             dugmeAyarlar.Font = new Font("Montserrat", 8F, FontStyle.Bold);
             dugmeAyarlar.Click += DugmeAyarlar_Tikla;
+            dugmeAyarlar.MouseEnter += Button_MouseEnter;
+            dugmeAyarlar.MouseLeave += Button_MouseLeave;
             aciklamaAraci.SetToolTip(dugmeAyarlar, "Program ayarlarýný yapýlandýrýr.");
 
             dugmeYardim.Location = new Point(650, 10);
@@ -106,6 +114,8 @@ namespace AdamPowerTool
             dugmeYardim.FlatAppearance.BorderColor = Color.FromArgb(255, 0, 0);
             dugmeYardim.Font = new Font("Montserrat", 8F, FontStyle.Bold);
             dugmeYardim.Click += DugmeYardim_Tikla;
+            dugmeYardim.MouseEnter += Button_MouseEnter;
+            dugmeYardim.MouseLeave += Button_MouseLeave;
             aciklamaAraci.SetToolTip(dugmeYardim, "Programýn kullanýmý hakkýnda bilgi verir.");
 
             // Sistem Bilgi Tablosu
@@ -223,6 +233,22 @@ namespace AdamPowerTool
             BackColor = Color.FromArgb(27, 27, 27);
             FormClosing += FormuKapatirken;
             ResumeLayout(false);
+        }
+
+        private void Button_MouseEnter(object? sender, EventArgs e)
+        {
+            if (sender is Button btn)
+            {
+                btn.BackColor = Color.FromArgb(60, 60, 60);
+            }
+        }
+
+        private void Button_MouseLeave(object? sender, EventArgs e)
+        {
+            if (sender is Button btn)
+            {
+                btn.BackColor = Color.FromArgb(46, 46, 46);
+            }
         }
 
         private void SistemBilgiTablosunuDoldur()
