@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
@@ -9,21 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Form1.Designer.cs" />
-    <Compile Remove="Form2.cs" />
-    <Compile Remove="Form2.Designer.cs" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="MailKit" Version="4.8.0" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.0.39" />
   </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Remove="Form2.resx" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="LiveCharts.WinForms" Version="0.9.7.1" />
-    <PackageReference Include="MailKit" Version="4.11.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.Management" Version="9.0.4" />
-    <PackageReference Include="System.Text.Json" Version="9.0.4" />
-  </ItemGroup>
-
 </Project>

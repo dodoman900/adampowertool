@@ -23,6 +23,9 @@ namespace AdamPowerTool
                 cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
                 ramCounter = new PerformanceCounter("Memory", "% Committed Bytes In Use");
                 diskCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
+
+                // İlk verileri ekle
+                VerileriGuncelle();
             }
             catch (Exception ex)
             {
@@ -35,7 +38,6 @@ namespace AdamPowerTool
         {
             guncellemeZamanlayici.Tick += (s, e) => VerileriGuncelle();
             guncellemeZamanlayici.Start();
-            VerileriGuncelle();
         }
 
         private void VerileriGuncelle()
@@ -74,7 +76,7 @@ namespace AdamPowerTool
 
         public SistemVerileri GetArsivVerileri()
         {
-            return arsivVerileri;
+            return arsivVerileri ?? new SistemVerileri();
         }
 
         public void Kaydet()

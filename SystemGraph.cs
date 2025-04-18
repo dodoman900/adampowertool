@@ -1,59 +1,60 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-using LiveCharts;
-using LiveCharts.Wpf;
+using ScottPlot;
 
 namespace AdamPowerTool
 {
-    public class SystemGraph : UserControl
+    public class SystemGraph : Control
     {
-        private readonly CartesianChart cpuChart;
-        private readonly CartesianChart ramChart;
-        private readonly CartesianChart diskChart;
-        private readonly CartesianChart gpuChart;
-        private readonly CartesianChart gucChart;
+        private readonly FormsPlot cpuPlot;
+        private readonly FormsPlot ramPlot;
+        private readonly FormsPlot diskPlot;
+        private readonly FormsPlot gpuPlot;
+        private readonly FormsPlot gucPlot;
         private readonly System.Windows.Forms.Timer guncellemeZamanlayici = new();
-        private readonly ChartValues<double> cpuValues = new();
-        private readonly ChartValues<double> ramValues = new();
-        private readonly ChartValues<double> diskValues = new();
-        private readonly ChartValues<double> gpuValues = new();
-        private readonly ChartValues<double> gucValues = new();
+        private readonly double[] cpuValues = new double[60];
+        private readonly double[] ramValues = new double[60];
+        private readonly double[] diskValues = new double[60];
+        private readonly double[] gpuValues = new double[60];
+        private readonly double[] gucValues = new double[60];
+        private readonly double[] timeValues = new double[60];
+        private int veriIndex = 0;
 
         public SystemGraph()
         {
-            guncellemeZamanlayici.Interval = 1000;
+            DoubleBuffered = true;
+            guncellemeZamanlayici.Interval = 1000; // 1 saniyede bir güncelle
             guncellemeZamanlayici.Tick += (s, e) => Guncelle();
 
-            cpuChart = new CartesianChart { Dock = DockStyle.Top, Height = 100 };
-            ramChart = new CartesianChart { Dock = DockStyle.Top, Height = 100 };
-            diskChart = new CartesianChart { Dock = DockStyle.Top, Height = 100 };
-            gpuChart = new CartesianChart { Dock = DockStyle.Top, Height = 100 };
-            gucChart = new CartesianChart { Dock = DockStyle.Top, Height = 100 };
+            // Zaman ekseni (son 60 saniye)
+            for (int i = 0; i < timeValues.Length; i++)
+                timeValues[i] = i;
 
-            GrafikOlustur(cpuChart, cpuValues, "CPU Kullanımı (%)", 100);
-            GrafikOlustur(ramChart, ramValues, "RAM Kullanımı (%)", 100);
-            GrafikOlustur(diskChart, diskValues, "Disk Kullanımı (%)", 100);
-            GrafikOlustur(gpuChart, gpuValues, "GPU Kullanımı (%)", 100);
-            GrafikOlustur(gucChart, gucValues, "Güç Kullanımı (Watt)", 300);
+            // Grafik kontrolleri
+            cpuPlot = new FormsPlot { Dock = DockStyle.Top, Height = 100 };
+            ramPlot = new FormsPlot { Dock = DockStyle.Top, Height = 100 };
+            diskPlot = new FormsPlot { Dock = DockStyle.Top, Height = 100 };
+            gpuPlot = new FormsPlot { Dock = DockStyle.Top, Height = 100 };
+            gucPlot = new FormsPlot { Dock = DockStyle.Top, Height = 100 };
 
-            Controls.AddRange(new Control[] { cpuChart, ramChart, diskChart, gpuChart, gucChart });
+            GrafikOlustur(cpuPlot, cpuValues, "CPU Kullanımı (%)", 100, System.Drawing.Color.Green);
+            GrafikOlustur(ramPlot, ramValues, "RAM Kullanımı (%)", 100, System.Drawing.Color.Red);
+            GrafikOlustur(diskPlot, diskValues, "Disk Kullanımı (%)", 100, System.Drawing.Color.Yellow);
+            GrafikOlustur(gpuPlot, gpuValues, "GPU Kullanımı (%)", 100, System.Drawing.Color.Orange);
+            GrafikOlustur(gucPlot, gucValues, "Güç Kullanımı (Watt)", 300, System.Drawing.Color.Cyan);
+
+            Controls.AddRange(new Control[] { cpuPlot, ramPlot, diskPlot, gpuPlot, gucPlot });
         }
 
-        private void GrafikOlustur(CartesianChart chart, ChartValues<double> values, string baslik, double maxDeger)
+        private void GrafikOlustur(FormsPlot plot, double[] values, string baslik, double maxDeger, System.Drawing.Color renk)
         {
-            chart.Series = new SeriesCollection
-            {
-                new LineSeries
-                {
-                    Title = baslik,
-                    Values = values,
-                    PointGeometry = null,
-                    Stroke = System.Windows.Media.Brushes.Green
-                }
-            };
-            chart.AxisX.Add(new Axis { IsMerged = true, ShowLabels = false });
-            chart.AxisY.Add(new Axis { MinValue = 0, MaxValue = maxDeger });
+            var plt = plot.Plot;
+            plt.AddSignal(values, 1, label: baslik, color: renk);
+            plt.Title(baslik);
+            plt.XLabel("Zaman (saniye)");
+            plt.YLabel("Değer");
+            plt.SetAxisLimits(xMin: 0, xMax: 60, yMin: 0, yMax: maxDeger);
+            plot.Render();
         }
 
         public void GuncellemeyiBaslat()
@@ -71,36 +72,44 @@ namespace AdamPowerTool
             try
             {
                 var sistemVerileri = new SystemMonitor().GetArsivVerileri();
-                if (sistemVerileri == null) return;
+                if (sistemVerileri == null)
+                {
+                    HataYoneticisi.HataEleAl(new Exception("Sistem verileri null"), "Grafik güncellenemedi.");
+                    return;
+                }
 
-                DateTime simdi = DateTime.Now;
-                DateTime birDakikaOnce = simdi.AddMinutes(-1);
+                // Son veriyi al
+                double cpuDeger = sistemVerileri.islemciVerileri.Count > 0 ? sistemVerileri.islemciVerileri[^1].deger : 0;
+                double ramDeger = sistemVerileri.ramVerileri.Count > 0 ? sistemVerileri.ramVerileri[^1].deger : 0;
+                double diskDeger = sistemVerileri.diskVerileri.Count > 0 ? sistemVerileri.diskVerileri[^1].deger : 0;
+                double gpuDeger = sistemVerileri.ekranKartiVerileri.Count > 0 ? sistemVerileri.ekranKartiVerileri[^1].deger : 0;
+                double gucDeger = sistemVerileri.gucVerileri.Count > 0 ? sistemVerileri.gucVerileri[^1].deger : 0;
 
-                cpuValues.Clear();
-                ramValues.Clear();
-                diskValues.Clear();
-                gpuValues.Clear();
-                gucValues.Clear();
+                // Verileri kaydır ve yeni değeri ekle
+                if (veriIndex >= cpuValues.Length)
+                {
+                    Array.Copy(cpuValues, 1, cpuValues, 0, cpuValues.Length - 1);
+                    Array.Copy(ramValues, 1, ramValues, 0, ramValues.Length - 1);
+                    Array.Copy(diskValues, 1, diskValues, 0, diskValues.Length - 1);
+                    Array.Copy(gpuValues, 1, gpuValues, 0, gpuValues.Length - 1);
+                    Array.Copy(gucValues, 1, gucValues, 0, gucValues.Length - 1);
+                    veriIndex = cpuValues.Length - 1;
+                }
 
-                foreach (var veri in sistemVerileri.islemciVerileri)
-                    if (veri.zaman >= birDakikaOnce)
-                        cpuValues.Add(veri.deger);
+                cpuValues[veriIndex] = cpuDeger;
+                ramValues[veriIndex] = ramDeger;
+                diskValues[veriIndex] = diskDeger;
+                gpuValues[veriIndex] = gpuDeger;
+                gucValues[veriIndex] = gucDeger;
 
-                foreach (var veri in sistemVerileri.ramVerileri)
-                    if (veri.zaman >= birDakikaOnce)
-                        ramValues.Add(veri.deger);
+                veriIndex++;
 
-                foreach (var veri in sistemVerileri.diskVerileri)
-                    if (veri.zaman >= birDakikaOnce)
-                        diskValues.Add(veri.deger);
-
-                foreach (var veri in sistemVerileri.ekranKartiVerileri)
-                    if (veri.zaman >= birDakikaOnce)
-                        gpuValues.Add(veri.deger);
-
-                foreach (var veri in sistemVerileri.gucVerileri)
-                    if (veri.zaman >= birDakikaOnce)
-                        gucValues.Add(veri.deger);
+                // Grafikleri güncelle
+                cpuPlot.Render();
+                ramPlot.Render();
+                diskPlot.Render();
+                gpuPlot.Render();
+                gucPlot.Render();
             }
             catch (Exception ex)
             {
