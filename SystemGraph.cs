@@ -24,38 +24,37 @@ namespace AdamPowerTool
         public SystemGraph()
         {
             DoubleBuffered = true;
-            guncellemeZamanlayici.Interval = 1000; // 1 saniyede bir güncelle
+            guncellemeZamanlayici.Interval = 1000;
             guncellemeZamanlayici.Tick += (s, e) => Guncelle();
 
-            // Zaman ekseni (son 60 saniye)
             for (int i = 0; i < timeValues.Length; i++)
                 timeValues[i] = i;
 
-            // Grafik kontrolleri
             cpuPlot = new FormsPlot { Dock = DockStyle.Top, Height = 100 };
             ramPlot = new FormsPlot { Dock = DockStyle.Top, Height = 100 };
             diskPlot = new FormsPlot { Dock = DockStyle.Top, Height = 100 };
             gpuPlot = new FormsPlot { Dock = DockStyle.Top, Height = 100 };
             gucPlot = new FormsPlot { Dock = DockStyle.Top, Height = 100 };
 
-            GrafikOlustur(cpuPlot, cpuValues, "CPU Kullanımı (%)", 100, System.Drawing.Color.Green);
-            GrafikOlustur(ramPlot, ramValues, "RAM Kullanımı (%)", 100, System.Drawing.Color.Red);
-            GrafikOlustur(diskPlot, diskValues, "Disk Kullanımı (%)", 100, System.Drawing.Color.Yellow);
-            GrafikOlustur(gpuPlot, gpuValues, "GPU Kullanımı (%)", 100, System.Drawing.Color.Orange);
-            GrafikOlustur(gucPlot, gucValues, "Güç Kullanımı (Watt)", 300, System.Drawing.Color.Cyan);
+            GrafikOlustur(cpuPlot, cpuValues, "CPU Kullanımı (%)", 100, ScottPlot.Color.FromHex("#00FF00"));
+            GrafikOlustur(ramPlot, ramValues, "RAM Kullanımı (%)", 100, ScottPlot.Color.FromHex("#FF0000"));
+            GrafikOlustur(diskPlot, diskValues, "Disk Kullanımı (%)", 100, ScottPlot.Color.FromHex("#FFFF00"));
+            GrafikOlustur(gpuPlot, gpuValues, "GPU Kullanımı (%)", 100, ScottPlot.Color.FromHex("#FFA500"));
+            GrafikOlustur(gucPlot, gucValues, "Güç Kullanımı (Watt)", 300, ScottPlot.Color.FromHex("#00FFFF"));
 
             Controls.AddRange(new Control[] { cpuPlot, ramPlot, diskPlot, gpuPlot, gucPlot });
         }
 
-        private void GrafikOlustur(FormsPlot plot, double[] values, string baslik, double maxDeger, System.Drawing.Color renk)
+        private void GrafikOlustur(FormsPlot plot, double[] values, string baslik, double maxDeger, ScottPlot.Color renk)
         {
-            var plt = plot.Plot;
-            plt.AddSignal(values, 1, label: baslik, color: renk);
-            plt.Title(baslik);
-            plt.XLabel("Zaman (saniye)");
-            plt.YLabel("Değer");
-            plt.SetAxisLimits(xMin: 0, xMax: 60, yMin: 0, yMax: maxDeger);
-            plot.Render();
+            var signal = plot.Plot.Add.Signal(values);
+            signal.Color = renk;
+            signal.Label = baslik;
+            plot.Plot.Title(baslik);
+            plot.Plot.Axes.SetLimits(0, 60, 0, maxDeger);
+            plot.Plot.XLabel("Zaman (saniye)");
+            plot.Plot.YLabel("Değer");
+            plot.Refresh();
         }
 
         public void GuncellemeyiBaslat()
@@ -79,14 +78,12 @@ namespace AdamPowerTool
                     return;
                 }
 
-                // Son veriyi al
                 double cpuDeger = sistemVerileri.islemciVerileri.Count > 0 ? sistemVerileri.islemciVerileri[^1].deger : 0;
                 double ramDeger = sistemVerileri.ramVerileri.Count > 0 ? sistemVerileri.ramVerileri[^1].deger : 0;
                 double diskDeger = sistemVerileri.diskVerileri.Count > 0 ? sistemVerileri.diskVerileri[^1].deger : 0;
                 double gpuDeger = sistemVerileri.ekranKartiVerileri.Count > 0 ? sistemVerileri.ekranKartiVerileri[^1].deger : 0;
                 double gucDeger = sistemVerileri.gucVerileri.Count > 0 ? sistemVerileri.gucVerileri[^1].deger : 0;
 
-                // Verileri kaydır ve yeni değeri ekle
                 if (veriIndex >= cpuValues.Length)
                 {
                     Array.Copy(cpuValues, 1, cpuValues, 0, cpuValues.Length - 1);
@@ -105,12 +102,11 @@ namespace AdamPowerTool
 
                 veriIndex++;
 
-                // Grafikleri güncelle
-                cpuPlot.Render();
-                ramPlot.Render();
-                diskPlot.Render();
-                gpuPlot.Render();
-                gucPlot.Render();
+                cpuPlot.Refresh();
+                ramPlot.Refresh();
+                diskPlot.Refresh();
+                gpuPlot.Refresh();
+                gucPlot.Refresh();
             }
             catch (Exception ex)
             {
@@ -118,4 +114,4 @@ namespace AdamPowerTool
             }
         }
     }
-};
+}

@@ -8,9 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="9.0.4" />
-    <PackageReference Include="System.Management" Version="9.0.4" />
-    <PackageReference Include="MailKit" Version="4.11.0" />
-    <PackageReference Include="ScottPlot.WinForms" Version="5.0.55" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="MailKit" Version="4.8.0" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.0.39" />
+    <PackageReference Include="MetroFramework" Version="1.2.0.3" />
   </ItemGroup>
 </Project>
