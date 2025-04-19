@@ -14,4 +14,8 @@
     <PackageReference Include="ScottPlot.WinForms" Version="5.0.39" />
     <PackageReference Include="MetroFramework" Version="1.2.0.3" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Form2.resx" />
+  </ItemGroup>
 </Project>
